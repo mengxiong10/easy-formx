@@ -1,0 +1,57 @@
+
+$color-red: #f5222d;
+$color-error: $color-red;
+
+$label-color: rgba(0,0,0,.65);
+$item-height: 39px;
+
+
+.xmx-form-item {
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(0,0,0,.65);
+  box-sizing: border-box;
+  margin-bottom: 24px;
+  vertical-align: top;
+}
+
+.xmx-form-item__with-help {
+  margin-bottom: 6px;
+}
+
+.xmx-form-item__label {
+  float: left;
+  text-align: right;
+  vertical-align: middle;
+  font-size: 14px;
+  color: $label-color;
+  line-height: $item-height;
+  padding-right: 8px;
+  box-sizing: border-box;
+  &.is-required::before {
+    display: inline-block;
+    margin-right: 4px;
+    content: "*";
+    font-family: SimSun;
+    line-height: 1;
+    font-size: 14px;
+    color: $color-red;
+  }
+}
+
+.xmx-form-item__content {
+  line-height: $item-height;
+  position: relative;
+  font-size: 14px;
+}
+
+.xmx-form-item__error {
+  color: $color-error;
+  font-size: 14px;
+  line-height: 1;
+  padding-top: 4px;
+}
+
+.has-error .ant-input, .has-error .ant-input:hover {
+  border-color: #f5222d;
+}
