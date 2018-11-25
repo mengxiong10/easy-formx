@@ -1,7 +1,7 @@
-/**
- * @class ExampleComponent
- */
+const a = 'haha';
 
-import Form from './Form';
+const c = 1;
 
-export default Form;
+let a = function() {
+  return 'ok';
+};

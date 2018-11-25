@@ -1,15 +1,13 @@
-
 $color-red: #f5222d;
 $color-error: $color-red;
 
-$label-color: rgba(0,0,0,.65);
+$label-color: rgba(0, 0, 0, 0.65);
 $item-height: 39px;
-
 
 .xmx-form-item {
   font-size: 14px;
   line-height: 1.5;
-  color: rgba(0,0,0,.65);
+  color: rgba(0, 0, 0, 0.65);
   box-sizing: border-box;
   margin-bottom: 24px;
   vertical-align: top;
@@ -31,7 +29,7 @@ $item-height: 39px;
   &.is-required::before {
     display: inline-block;
     margin-right: 4px;
-    content: "*";
+    content: '*';
     font-family: SimSun;
     line-height: 1;
     font-size: 14px;
@@ -52,6 +50,7 @@ $item-height: 39px;
   padding-top: 4px;
 }
 
-.has-error .ant-input, .has-error .ant-input:hover {
+.has-error .ant-input,
+.has-error .ant-input:hover {
   border-color: #f5222d;
 }

@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import Schema from 'async-validator';
 import classNames from 'classnames';
@@ -11,11 +10,10 @@ export interface IFormItemProps {
   rules?: any;
   required?: boolean; // 快捷设置 rules
   ctx: Ictx;
-  labelWidth?: number|string;
+  labelWidth?: number | string;
 }
 
 export class FormItemComponent extends React.Component<IFormItemProps, any> {
-
   static defaultProps = {
     initialValue: ''
   };
@@ -58,7 +56,9 @@ export class FormItemComponent extends React.Component<IFormItemProps, any> {
 
   getRules() {
     const { rules, required } = this.props;
-    const defaultRequired = [{ required: true, message: 'required', trigger: 'blur' }];
+    const defaultRequired = [
+      { required: true, message: 'required', trigger: 'blur' }
+    ];
     if (!rules) {
       return required ? defaultRequired : [];
     }
@@ -78,13 +78,12 @@ export class FormItemComponent extends React.Component<IFormItemProps, any> {
   getFilteredRule(trigger: string) {
     const rules = this.getRules();
 
-    return rules.filter((rule) => {
+    return rules.filter(rule => {
       return !rule.trigger || rule.trigger.indexOf(trigger) !== -1;
     });
   }
 
   validate(trigger: string) {
-
     return new Promise((resolve, reject) => {
       const rules = this.getFilteredRule(trigger);
       if (!this.props.prop) {
@@ -114,7 +113,6 @@ export class FormItemComponent extends React.Component<IFormItemProps, any> {
         }
       });
     });
-
   }
 
   getValueFromComponent(e: any) {
@@ -206,13 +204,11 @@ export class FormItemComponent extends React.Component<IFormItemProps, any> {
         onBlur={this.handleBlur}
         onChange={defaultOnChange ? this.handleChange : undefined}
       >
-        {
-          label && (
-            <label className={labelClasses} style={this.getLabelStyle()}>
-              {label + ctx.labelSuffix}
-            </label>
-          )
-        }
+        {label && (
+          <label className={labelClasses} style={this.getLabelStyle()}>
+            {label + ctx.labelSuffix}
+          </label>
+        )}
         <div className="xmx-form-item__content" style={this.contentStyle()}>
           {item}
           {error && <div className="xmx-form-item__error">{error}</div>}
@@ -223,7 +219,5 @@ export class FormItemComponent extends React.Component<IFormItemProps, any> {
 }
 
 export default (props: Omit<IFormItemProps, 'ctx'>) => (
-  <Consumer>
-    {(ctx) => <FormItemComponent {...props} ctx={ctx} />}
-  </Consumer>
+  <Consumer>{ctx => <FormItemComponent {...props} ctx={ctx} />}</Consumer>
 );

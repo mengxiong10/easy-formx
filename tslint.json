@@ -1,0 +1,30 @@
+{
+  "extends": ["tslint:latest", "tslint-react", "tslint-config-prettier"],
+  "rules": {
+    "indent": [true, "spaces", 2],
+    "semicolon": [true, "always"],
+    "trailing-comma": [true, { "multiline": "never", "singleline": "never" }],
+    "quotemark": [true, "single", "avoid-escape", "jsx-double"],
+    "ban-types": [
+      true,
+      ["Object", "Use {} instead."],
+      ["String"],
+      ["Boolean"],
+      ["Number"]
+    ],
+    "no-any": false,
+    "no-console": [true, "log"],
+    "no-conditional-assignment": true,
+    "max-line-length": [true, 240],
+    "max-classes-per-file": false,
+    "prefer-for-of": false,
+    "member-access": false,
+    "ordered-imports": false,
+    "curly": [true, "ignore-same-line"],
+    "object-literal-sort-keys": false,
+    "jsx-boolean-value": [true, "never"],
+    "jsx-no-multiline-js": false,
+    "jsx-self-close": false,
+    "jsx-no-lambda": false
+  }
+}

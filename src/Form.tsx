@@ -1,15 +1,14 @@
-
 import * as React from 'react';
-import FormItem from './FormItem';
-import { FormItemComponent } from './FormItem';
-import { Provider } from './FormContext';
 import './Form.scss';
+import { Provider } from './FormContext';
+import FormItem, { FormItemComponent } from './FormItem';
 
 interface IFormProps extends React.HTMLAttributes<HTMLFormElement> {
-  labelPosition?: 'right'|'left'|'top';
-  labelWidth?: string|number;
+  labelPosition?: 'right' | 'left' | 'top';
+  labelWidth?: string | number;
   labelSuffix?: string;
 }
+
 
 function isObject(obj: any) {
   return typeof obj === 'object' && obj !== null;
@@ -37,17 +36,17 @@ function set(obj: any, keyString: string, value: any) {
       const objValue = nested[key];
       newValue = isObject(objValue)
         ? objValue
-        : (+paths[index + 1] >= 0 ? [] : {});
+        : +paths[index + 1] >= 0
+        ? []
+        : {};
     }
     Object.assign(nested, { [key]: newValue });
     nested = nested[key];
   }
   return obj;
-
 }
 
 export default class Form extends React.Component<IFormProps, any> {
-
   static defaultProps = {
     labelPosition: 'right',
     labelSuffix: ' :'
@@ -55,17 +54,17 @@ export default class Form extends React.Component<IFormProps, any> {
 
   static Item = FormItem;
 
-  fields: {[key: string]: FormItemComponent} = {};
+  fields: { [key: string]: FormItemComponent } = {};
 
   resetFields = () => {
-    Object.keys(this.fields).forEach((key) => {
+    Object.keys(this.fields).forEach(key => {
       const field = this.fields[key];
       field.resetField();
     });
   }
 
-  setFieldsValue = (obj: { [key: string]: any}) => {
-    Object.keys(obj).forEach((key) => {
+  setFieldsValue = (obj: { [key: string]: any }) => {
+    Object.keys(obj).forEach(key => {
       if (this.fields.hasOwnProperty(key)) {
         this.fields[key].setFieldValue(obj[key]);
       }
@@ -76,7 +75,7 @@ export default class Form extends React.Component<IFormProps, any> {
   getFieldsValue = (keys?: string[]) => {
     const result: any = {};
     if (Array.isArray(keys) && keys.length) {
-      keys.forEach((key) => {
+      keys.forEach(key => {
         if (this.fields.hasOwnProperty(key)) {
           set(result, key, this.fields[key].state.value);
         } else {
@@ -84,7 +83,7 @@ export default class Form extends React.Component<IFormProps, any> {
         }
       });
     } else {
-      Object.keys(this.fields).forEach((key) => {
+      Object.keys(this.fields).forEach(key => {
         set(result, key, this.fields[key].state.value);
       });
     }
@@ -93,13 +92,13 @@ export default class Form extends React.Component<IFormProps, any> {
 
   validate() {
     return Promise.all(
-      Object.keys(this.fields).map((key) => {
+      Object.keys(this.fields).map(key => {
         return this.fields[key].validate('');
       })
-    ).then((res) => {
+    ).then(res => {
       const result = {};
       res.forEach((v: any) => {
-        Object.keys(v).forEach((key) => {
+        Object.keys(v).forEach(key => {
           set(result, key, v[key]);
         });
       });
@@ -112,9 +111,7 @@ export default class Form extends React.Component<IFormProps, any> {
     const ctx = this.getContext();
     return (
       <Provider value={ctx}>
-        <form {...rest}>
-          {this.props.children}
-        </form>
+        <form {...rest}>{this.props.children}</form>
       </Provider>
     );
   }
