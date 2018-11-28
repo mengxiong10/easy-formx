@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Schema from 'async-validator';
 import classNames from 'classnames';
-import { Consumer, Ictx } from './FormContext';
+import { Consumer } from './FormContext';
 
 export interface IFormItemProps {
   label?: string;
@@ -9,8 +9,8 @@ export interface IFormItemProps {
   initialValue?: any; // 用于初始化 和 重置
   rules?: any;
   required?: boolean; // 快捷设置 rules
-  ctx: Ictx;
   labelWidth?: number | string;
+  ctx: any;
 }
 
 export class FormItemComponent extends React.Component<IFormItemProps, any> {
@@ -33,7 +33,7 @@ export class FormItemComponent extends React.Component<IFormItemProps, any> {
       valid: true,
       error: ''
     });
-  }
+  };
 
   setFieldValue = (value: any) => {
     this.setState({
@@ -41,7 +41,7 @@ export class FormItemComponent extends React.Component<IFormItemProps, any> {
       valid: true,
       error: ''
     });
-  }
+  };
 
   isRequired() {
     const rules = this.getRules();
@@ -55,10 +55,10 @@ export class FormItemComponent extends React.Component<IFormItemProps, any> {
   }
 
   getRules() {
-    const { rules, required } = this.props;
-    const defaultRequired = [
-      { required: true, message: 'required', trigger: 'blur' }
-    ];
+    const { required, ctx, prop } = this.props;
+    const formRules = ctx.rules && prop && ctx.rules[prop];
+    const rules = this.props.rules || formRules;
+    const defaultRequired = [{ required: true, message: 'required', trigger: 'blur' }];
     if (!rules) {
       return required ? defaultRequired : [];
     }
@@ -78,7 +78,7 @@ export class FormItemComponent extends React.Component<IFormItemProps, any> {
   getFilteredRule(trigger: string) {
     const rules = this.getRules();
 
-    return rules.filter(rule => {
+    return rules.filter((rule) => {
       return !rule.trigger || rule.trigger.indexOf(trigger) !== -1;
     });
   }
@@ -128,11 +128,11 @@ export class FormItemComponent extends React.Component<IFormItemProps, any> {
     this.setState({ value }, () => {
       this.validate('change');
     });
-  }
+  };
 
   handleBlur = () => {
     this.validate('blur');
-  }
+  };
 
   getLabelStyle() {
     const result: any = {};
@@ -191,11 +191,11 @@ export class FormItemComponent extends React.Component<IFormItemProps, any> {
       }
       return child;
     });
-    const itemClasses = classNames('xmx-form-item', {
+    const itemClasses = classNames('easy-formx-item', {
       'has-error': !valid,
-      'xmx-form-item__with-help': error
+      'easy-formx-item__with-help': error
     });
-    const labelClasses = classNames('xmx-form-item__label', {
+    const labelClasses = classNames('easy-formx-item__label', {
       'is-required': this.isRequired()
     });
     return (
@@ -209,9 +209,9 @@ export class FormItemComponent extends React.Component<IFormItemProps, any> {
             {label + ctx.labelSuffix}
           </label>
         )}
-        <div className="xmx-form-item__content" style={this.contentStyle()}>
+        <div className="easy-formx-item__content" style={this.contentStyle()}>
           {item}
-          {error && <div className="xmx-form-item__error">{error}</div>}
+          {error && <div className="easy-formx-item__error">{error}</div>}
         </div>
       </div>
     );
@@ -219,5 +219,5 @@ export class FormItemComponent extends React.Component<IFormItemProps, any> {
 }
 
 export default (props: Omit<IFormItemProps, 'ctx'>) => (
-  <Consumer>{ctx => <FormItemComponent {...props} ctx={ctx} />}</Consumer>
+  <Consumer>{(ctx) => <FormItemComponent {...props} ctx={ctx} />}</Consumer>
 );

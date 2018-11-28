@@ -1,7 +1,3 @@
-const a = 'haha';
+export { default as Form } from './Form';
 
-const c = 1;
-
-let a = function() {
-  return 'ok';
-};
+export { default as FormItem } from './FormItem';

@@ -4,7 +4,7 @@ $color-error: $color-red;
 $label-color: rgba(0, 0, 0, 0.65);
 $item-height: 39px;
 
-.xmx-form-item {
+.easy-formx-item {
   font-size: 14px;
   line-height: 1.5;
   color: rgba(0, 0, 0, 0.65);
@@ -13,11 +13,11 @@ $item-height: 39px;
   vertical-align: top;
 }
 
-.xmx-form-item__with-help {
+.easy-formx-item__with-help {
   margin-bottom: 6px;
 }
 
-.xmx-form-item__label {
+.easy-formx-item__label {
   float: left;
   text-align: right;
   vertical-align: middle;
@@ -37,13 +37,13 @@ $item-height: 39px;
   }
 }
 
-.xmx-form-item__content {
+.easy-formx-item__content {
   line-height: $item-height;
   position: relative;
   font-size: 14px;
 }
 
-.xmx-form-item__error {
+.easy-formx-item__error {
   color: $color-error;
   font-size: 14px;
   line-height: 1;

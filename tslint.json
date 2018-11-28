@@ -1,5 +1,5 @@
 {
-  "extends": ["tslint:latest", "tslint-react", "tslint-config-prettier"],
+  "extends": ["tslint:recommend", "tslint-react", "tslint-config-prettier"],
   "rules": {
     "indent": [true, "spaces", 2],
     "semicolon": [true, "always"],

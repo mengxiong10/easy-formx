@@ -7,8 +7,8 @@ interface IFormProps extends React.HTMLAttributes<HTMLFormElement> {
   labelPosition?: 'right' | 'left' | 'top';
   labelWidth?: string | number;
   labelSuffix?: string;
+  rules?: object;
 }
-
 
 function isObject(obj: any) {
   return typeof obj === 'object' && obj !== null;
@@ -34,11 +34,7 @@ function set(obj: any, keyString: string, value: any) {
     let newValue = value;
     if (index !== lastIndex) {
       const objValue = nested[key];
-      newValue = isObject(objValue)
-        ? objValue
-        : +paths[index + 1] >= 0
-        ? []
-        : {};
+      newValue = isObject(objValue) ? objValue : +paths[index + 1] >= 0 ? [] : {};
     }
     Object.assign(nested, { [key]: newValue });
     nested = nested[key];
@@ -57,25 +53,25 @@ export default class Form extends React.Component<IFormProps, any> {
   fields: { [key: string]: FormItemComponent } = {};
 
   resetFields = () => {
-    Object.keys(this.fields).forEach(key => {
+    Object.keys(this.fields).forEach((key) => {
       const field = this.fields[key];
       field.resetField();
     });
-  }
+  };
 
   setFieldsValue = (obj: { [key: string]: any }) => {
-    Object.keys(obj).forEach(key => {
+    Object.keys(obj).forEach((key) => {
       if (this.fields.hasOwnProperty(key)) {
         this.fields[key].setFieldValue(obj[key]);
       }
     });
-  }
+  };
 
   // 获取一组控件的值, 不传返回全部
   getFieldsValue = (keys?: string[]) => {
     const result: any = {};
     if (Array.isArray(keys) && keys.length) {
-      keys.forEach(key => {
+      keys.forEach((key) => {
         if (this.fields.hasOwnProperty(key)) {
           set(result, key, this.fields[key].state.value);
         } else {
@@ -83,22 +79,22 @@ export default class Form extends React.Component<IFormProps, any> {
         }
       });
     } else {
-      Object.keys(this.fields).forEach(key => {
+      Object.keys(this.fields).forEach((key) => {
         set(result, key, this.fields[key].state.value);
       });
     }
     return result;
-  }
+  };
 
   validate() {
     return Promise.all(
-      Object.keys(this.fields).map(key => {
+      Object.keys(this.fields).map((key) => {
         return this.fields[key].validate('');
       })
-    ).then(res => {
+    ).then((res) => {
       const result = {};
       res.forEach((v: any) => {
-        Object.keys(v).forEach(key => {
+        Object.keys(v).forEach((key) => {
           set(result, key, v[key]);
         });
       });
@@ -120,23 +116,21 @@ export default class Form extends React.Component<IFormProps, any> {
     return {
       addField: this.addField,
       removeField: this.removeField,
-      labelPosition: this.props.labelPosition!,
-      labelSuffix: this.props.labelSuffix!,
-      labelWidth: this.props.labelWidth
+      ...this.props
     };
-  }
+  };
 
   private addField = (field: FormItemComponent) => {
     const key = field.props.prop;
     if (key) {
       this.fields[key] = field;
     }
-  }
+  };
 
   private removeField = (field: FormItemComponent) => {
     const key = field.props.prop;
     if (key && this.fields.hasOwnProperty(key)) {
       delete this.fields[key];
     }
-  }
+  };
 }
