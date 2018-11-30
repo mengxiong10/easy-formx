@@ -42,6 +42,24 @@ function set(obj: any, keyString: string, value: any) {
   return obj;
 }
 
+function flattenObject(
+  path = '',
+  obj: any,
+  match: (key: string) => boolean,
+  callback: (key: string, value: any) => any
+) {
+  if (match(path)) {
+    callback(path, obj);
+  } else if (Array.isArray(obj)) {
+    obj.forEach((value, index) => flattenObject(`${path}[${index}]`, value, match, callback));
+  } else if (isObject(obj)) {
+    Object.keys(obj).forEach((key) => {
+      const value = obj[key];
+      flattenObject(`${path}${path ? '.' : ''}${key}`, value, match, callback);
+    });
+  }
+}
+
 export default class Form extends React.Component<IFormProps, any> {
   static defaultProps = {
     labelPosition: 'right',
@@ -50,43 +68,43 @@ export default class Form extends React.Component<IFormProps, any> {
 
   static Item = FormItem;
 
-  fields: { [key: string]: FormItemComponent } = {};
+  private fields: { [key: string]: FormItemComponent } = {};
 
-  resetFields = () => {
-    Object.keys(this.fields).forEach((key) => {
+  public setFieldsValue = (obj: { [key: string]: any }) => {
+    const fieldNames = this.getAllFieldsName();
+    const match = (key: string) => fieldNames.indexOf(key) >= 0;
+    const setFieldValue = (key: string, value: any) => {
+      this.fields[key].setFieldValue(value);
+    };
+    flattenObject('', obj, match, setFieldValue);
+  };
+
+  /**
+   * 重置一组控件,不传重置全部
+   */
+  public resetFields = (keys?: string | string[]) => {
+    const fieldNames = keys ? this.getNestedFields(keys) : this.getAllFieldsName();
+    fieldNames.forEach((key) => {
       const field = this.fields[key];
       field.resetField();
     });
   };
 
-  setFieldsValue = (obj: { [key: string]: any }) => {
-    Object.keys(obj).forEach((key) => {
-      if (this.fields.hasOwnProperty(key)) {
-        this.fields[key].setFieldValue(obj[key]);
-      }
-    });
+  /**
+   * 获取一组控件的值, 不传返回全部
+   */
+  public getFieldsValue = (keys?: string | string[]) => {
+    const fieldNames = keys ? this.getNestedFields(keys) : this.getAllFieldsName();
+    return fieldNames.reduce(
+      (acc, cur) => {
+        const value = this.fields[cur].state.value;
+        set(acc, cur, value);
+      },
+      {} as any
+    );
   };
 
-  // 获取一组控件的值, 不传返回全部
-  getFieldsValue = (keys?: string[]) => {
-    const result: any = {};
-    if (Array.isArray(keys) && keys.length) {
-      keys.forEach((key) => {
-        if (this.fields.hasOwnProperty(key)) {
-          set(result, key, this.fields[key].state.value);
-        } else {
-          set(result, key, undefined);
-        }
-      });
-    } else {
-      Object.keys(this.fields).forEach((key) => {
-        set(result, key, this.fields[key].state.value);
-      });
-    }
-    return result;
-  };
-
-  validate() {
+  public validate() {
     return Promise.all(
       Object.keys(this.fields).map((key) => {
         return this.fields[key].validate('');
@@ -109,6 +127,20 @@ export default class Form extends React.Component<IFormProps, any> {
       <Provider value={ctx}>
         <form {...rest}>{this.props.children}</form>
       </Provider>
+    );
+  }
+
+  private getAllFieldsName() {
+    return Object.keys(this.fields);
+  }
+
+  private getNestedFields(name: string | string[]) {
+    const partialNames = Array.isArray(name) ? name : [name];
+    return this.getAllFieldsName().filter((fullName) =>
+      partialNames.some(
+        (partialName) =>
+          fullName === partialName || new RegExp(`^${partialName}[.\\[]`).test(fullName)
+      )
     );
   }
 
