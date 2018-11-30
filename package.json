@@ -15,8 +15,8 @@
     "npm": ">=5"
   },
   "scripts": {
-    "test": "cross-env CI=1 react-scripts-ts test --env=jsdom",
-    "test:watch": "react-scripts-ts test --env=jsdom",
+    "test": "jest --env=jsdom",
+    "test:watch": "npm run test -- --watch",
     "build": "rollup -c",
     "start": "rollup -c -w",
     "dev": "parcel ./examples/index.html",
@@ -36,6 +36,24 @@
       "git add"
     ]
   },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{ts,tsx}"
+    ],
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testMatch": [
+      "<rootDir>/test/**/?(*.)(spec|test).ts?(x)"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json"
+    ]
+  },
   "dependencies": {
     "async-validator": "^1.10.0",
     "classnames": "^2.2.6",
@@ -49,6 +67,7 @@
     "antd": "^3.10.9",
     "highlight.js": "^9.13.1",
     "husky": "^1.1.4",
+    "jest": "^23.6.0",
     "lint-staged": "^8.0.5",
     "node-sass": "^4.10.0",
     "parcel-bundler": "^1.10.3",
@@ -61,6 +80,7 @@
     "rollup-plugin-postcss": "^1.6.2",
     "rollup-plugin-tslint": "^0.1.38",
     "rollup-plugin-typescript2": "^0.18.0",
+    "ts-jest": "^23.10.5",
     "tslint": "^5.11.0",
     "tslint-config-prettier": "^1.16.0",
     "tslint-react": "^3.6.0",
