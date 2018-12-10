@@ -10,12 +10,16 @@ export interface IFormItemProps {
   rules?: any;
   required?: boolean; // 快捷设置 rules
   labelWidth?: number | string;
+  trigger: string;
+  valuePropName: string;
   ctx: any;
 }
 
 export class FormItemComponent extends React.Component<IFormItemProps, any> {
   static defaultProps = {
-    initialValue: ''
+    initialValue: '',
+    trigger: 'onChange',
+    valuePropName: 'value'
   };
 
   constructor(props: IFormItemProps) {
@@ -177,20 +181,23 @@ export class FormItemComponent extends React.Component<IFormItemProps, any> {
   }
 
   public render() {
-    const { label, prop, ctx } = this.props;
+    const { label, prop, ctx, valuePropName, trigger } = this.props;
     const { error, valid } = this.state;
     const children = this.props.children!;
-    let defaultOnChange;
-    const item = React.Children.map(children, (child, index) => {
-      if (prop && index === 0 && React.isValidElement(child)) {
-        defaultOnChange = (child.props as any).onChange;
-        return React.cloneElement<any>(child, {
-          value: this.state.value,
-          onChange: defaultOnChange || this.handleChange
-        });
-      }
-      return child;
-    });
+    let items = children;
+    let defaultTrigger;
+    if (prop) {
+      items = React.Children.map(children, (child, index) => {
+        if (index === 0 && React.isValidElement(child)) {
+          defaultTrigger = (child.props as any).onChange;
+          return React.cloneElement<any>(child, {
+            [valuePropName]: this.state.value,
+            [trigger]: defaultTrigger || this.handleChange
+          });
+        }
+        return child;
+      });
+    }
     const itemClasses = classNames('easy-formx-item', {
       'has-error': !valid,
       'easy-formx-item__with-help': error
@@ -202,7 +209,7 @@ export class FormItemComponent extends React.Component<IFormItemProps, any> {
       <div
         className={itemClasses}
         onBlur={this.handleBlur}
-        onChange={defaultOnChange ? this.handleChange : undefined}
+        {...{ [trigger]: defaultTrigger ? this.handleChange : undefined }}
       >
         {label && (
           <label className={labelClasses} style={this.getLabelStyle()}>
@@ -210,7 +217,7 @@ export class FormItemComponent extends React.Component<IFormItemProps, any> {
           </label>
         )}
         <div className="easy-formx-item__content" style={this.contentStyle()}>
-          {item}
+          {items}
           {error && <div className="easy-formx-item__error">{error}</div>}
         </div>
       </div>
