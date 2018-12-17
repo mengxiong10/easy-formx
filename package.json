@@ -20,9 +20,8 @@
     "build": "rollup -c",
     "start": "rollup -c -w",
     "dev": "parcel ./examples/index.html",
-    "prepare": "npm run build",
-    "predeploy": "cd example && npm install && npm run build",
-    "deploy": "gh-pages -d example/build",
+    "build:example": "parcel build ./examples/index.html --out-dir examples/dist --no-source-maps",
+    "deploy": "npm run build:example && gh-pages -d examples/dist",
     "format": "prettier --write src/**/* test/**/*"
   },
   "husky": {
@@ -71,6 +70,7 @@
     "antd": "^3.10.9",
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.7.0",
+    "gh-pages": "^2.0.1",
     "highlight.js": "^9.13.1",
     "husky": "^1.1.4",
     "jest": "^23.6.0",

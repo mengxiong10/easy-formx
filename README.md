@@ -10,7 +10,7 @@
 
 ## Demo
 
-<https://mengxiong10.github.io/easy-formx/demo/index.html>
+<https://mengxiong10.github.io/easy-formx/index.html>
 
 ## Install
 
