@@ -99,6 +99,7 @@ export default class Form extends React.Component<IFormProps, any> {
       (acc, cur) => {
         const value = this.fields[cur].state.value;
         set(acc, cur, value);
+        return acc;
       },
       {} as any
     );
