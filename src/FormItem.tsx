@@ -10,22 +10,24 @@ export interface IFormItemProps {
   rules?: any;
   required?: boolean; // 快捷设置 rules
   labelWidth?: number | string;
-  trigger: string;
-  valuePropName: string;
+  trigger?: string;
+  valuePropName?: string;
   ctx: any;
 }
 
 export class FormItemComponent extends React.Component<IFormItemProps, any> {
   static defaultProps = {
-    initialValue: '',
+    // initialValue: '',
     trigger: 'onChange',
     valuePropName: 'value'
   };
 
+  triggerHandleCache: (e: any) => void;
+
   constructor(props: IFormItemProps) {
     super(props);
     this.state = {
-      value: props.initialValue,
+      value: props.hasOwnProperty('initialValue') ? props.initialValue : '',
       valid: true,
       error: ''
     };
@@ -33,7 +35,7 @@ export class FormItemComponent extends React.Component<IFormItemProps, any> {
 
   resetField = () => {
     this.setState({
-      value: this.props.initialValue,
+      value: this.props.hasOwnProperty('initialValue') ? this.props.initialValue : '',
       valid: true,
       error: ''
     });
@@ -134,6 +136,21 @@ export class FormItemComponent extends React.Component<IFormItemProps, any> {
     });
   };
 
+  getTriggerHandle = (trigger?: (e: any) => void) => {
+    if (this.triggerHandleCache) {
+      return this.triggerHandleCache;
+    }
+    if (trigger) {
+      this.triggerHandleCache = (e: any) => {
+        this.handleChange(e);
+        trigger(e);
+      };
+    } else {
+      this.triggerHandleCache = this.handleChange;
+    }
+    return this.triggerHandleCache;
+  };
+
   handleBlur = () => {
     this.validate('blur');
   };
@@ -185,14 +202,13 @@ export class FormItemComponent extends React.Component<IFormItemProps, any> {
     const { error, valid } = this.state;
     const children = this.props.children!;
     let items = children;
-    let defaultTrigger;
     if (prop) {
       items = React.Children.map(children, (child, index) => {
         if (index === 0 && React.isValidElement(child)) {
-          defaultTrigger = (child.props as any).onChange;
+          const defaultTrigger = (child.props as any).onChange;
           return React.cloneElement<any>(child, {
-            [valuePropName]: this.state.value,
-            [trigger]: defaultTrigger || this.handleChange
+            [valuePropName!]: this.state.value,
+            [trigger!]: this.getTriggerHandle(defaultTrigger)
           });
         }
         return child;
@@ -209,7 +225,7 @@ export class FormItemComponent extends React.Component<IFormItemProps, any> {
       <div
         className={itemClasses}
         onBlur={this.handleBlur}
-        {...{ [trigger]: defaultTrigger ? this.handleChange : undefined }}
+        // {...{ [trigger!]: defaultTrigger ? this.handleChange : undefined }}
       >
         {label && (
           <label className={labelClasses} style={this.getLabelStyle()}>
