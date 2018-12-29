@@ -1,5 +1,4 @@
 import * as React from 'react';
-import './Form.scss';
 import { Provider } from './FormContext';
 import FormItem, { FormItemComponent } from './FormItem';
 

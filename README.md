@@ -31,12 +31,12 @@ $ npm install easy-formx --save
 
 <!-- prettier-ignore-start -->
 
-| Method   | Description         | Type                                  |
-| -------- | ------------------- | ------------------------------------- |
-| validate | validate all fields | () => Promise<{\[fieldName\] : any }> |
-| getFieldsValue | Get the specified fields' values.If you don't specify a parameter, you will get all fields' value | (fieldNames?: string[]) => {\[fieldName\]: any}|
-| setFieldsValue | Set the specified fields' values. | (obj: { [fieldName: string]: any }) => void |
-| resetFields | Reset the specified fields' values.If you don't specify a parameter, all the fields will be reset |
+| Method         | Type                                   | Description |
+| -------------- | -------------------------------------- | ----------- |
+| validate       | () => Promise<{\[fieldName\] : any }>  | validate all fields |
+| getFieldsValue | (fieldNames[]) => {\[fieldName\]: any} | Get the specified fields' values.When parameter is undefined, return all fields' value   |
+| setFieldsValue | ({\[fieldName\]: any}) => void         | Set the specified fields' values. |
+| resetFields    |                                        | Reset the specified fields' values.When parameter is undefined, all fields will be reset |
 
 <!-- prettier-ignore-end -->
 

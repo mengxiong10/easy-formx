@@ -23,6 +23,7 @@ export default {
       sourcemap: true
     }
   ],
+  external: ['async-validator'],
   plugins: [
     external(),
     postcss({

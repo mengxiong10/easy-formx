@@ -9,11 +9,11 @@ interface IState {
 export default class Basic extends React.Component<any, IState> {
   formRef: Form;
 
-  id = 0;
-
   state = {
     keys: [0, 1, 2]
   };
+
+  id = Math.max(...this.state.keys);
 
   add = () => {
     this.setState((prevState) => ({

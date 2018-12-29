@@ -17,7 +17,6 @@ export interface IFormItemProps {
 
 export class FormItemComponent extends React.Component<IFormItemProps, any> {
   static defaultProps = {
-    // initialValue: '',
     trigger: 'onChange',
     valuePropName: 'value'
   };
@@ -159,7 +158,7 @@ export class FormItemComponent extends React.Component<IFormItemProps, any> {
     const result: any = {};
     const { labelPosition } = this.props.ctx;
     const labelWidth = this.props.labelWidth || this.props.ctx.labelWidth;
-    if (labelPosition === 'top') return result;
+    if (labelPosition === 'top') return { float: 'none' };
 
     result.textAlign = labelPosition;
 
@@ -222,11 +221,7 @@ export class FormItemComponent extends React.Component<IFormItemProps, any> {
       'is-required': this.isRequired()
     });
     return (
-      <div
-        className={itemClasses}
-        onBlur={this.handleBlur}
-        // {...{ [trigger!]: defaultTrigger ? this.handleChange : undefined }}
-      >
+      <div className={itemClasses} onBlur={this.handleBlur}>
         {label && (
           <label className={labelClasses} style={this.getLabelStyle()}>
             {label + ctx.labelSuffix}
