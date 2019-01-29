@@ -7,6 +7,7 @@ interface IFormProps extends React.HTMLAttributes<HTMLFormElement> {
   labelWidth?: string | number;
   labelSuffix?: string;
   rules?: object;
+  disabled?: boolean;
 }
 
 function isObject(obj: any) {
@@ -121,7 +122,7 @@ export default class Form extends React.Component<IFormProps, any> {
   }
 
   public render() {
-    const { labelPosition, labelSuffix, labelWidth, ...rest } = this.props;
+    const { labelPosition, labelSuffix, labelWidth, rules, disabled, ...rest } = this.props;
     const ctx = this.getContext();
     return (
       <Provider value={ctx}>

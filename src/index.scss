@@ -1,7 +1,7 @@
 $color-red: #f5222d;
 $color-error: $color-red;
 
-$label-color: rgba(0, 0, 0, 0.85);
+$label-color: rgba(0, 0, 0, 0.65);
 $item-height: 39px;
 
 .easy-formx-item {
@@ -9,17 +9,16 @@ $item-height: 39px;
   line-height: 1.5;
   color: rgba(0, 0, 0, 0.65);
   box-sizing: border-box;
-  margin-bottom: 22px;
+  margin-bottom: 24px;
   vertical-align: top;
 }
 
-.easy-formx-item__with-help {
+.easy-formx-item--with-error {
   margin-bottom: 6px;
 }
 
 .easy-formx-item__label {
   float: left;
-  text-align: right;
   vertical-align: middle;
   font-size: 14px;
   color: $label-color;
@@ -37,6 +36,10 @@ $item-height: 39px;
   }
 }
 
+.easy-formx-item__suffix {
+  margin-left: 2px;
+}
+
 .easy-formx-item__content {
   line-height: $item-height;
   position: relative;
@@ -45,7 +48,7 @@ $item-height: 39px;
 
 .easy-formx-item__error {
   color: $color-error;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1;
   padding-top: 4px;
 }

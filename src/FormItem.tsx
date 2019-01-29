@@ -3,20 +3,26 @@ import Schema from 'async-validator';
 import classNames from 'classnames';
 import { Consumer } from './FormContext';
 
-export interface IFormItemProps {
+export interface IFormItemWithoutCtxProp extends React.HTMLAttributes<HTMLDivElement> {
   label?: string;
   prop?: string;
+  labelStyle?: object;
   initialValue?: any; // 用于初始化 和 重置
   rules?: any;
   required?: boolean; // 快捷设置 rules
   labelWidth?: number | string;
   trigger?: string;
   valuePropName?: string;
+  getValueFromComponent?: (...args: any) => any;
+}
+
+export interface IFormItemProps extends IFormItemWithoutCtxProp {
   ctx: any;
 }
 
 export class FormItemComponent extends React.Component<IFormItemProps, any> {
   static defaultProps = {
+    // initialValue: '',
     trigger: 'onChange',
     valuePropName: 'value'
   };
@@ -63,7 +69,7 @@ export class FormItemComponent extends React.Component<IFormItemProps, any> {
     const { required, ctx, prop } = this.props;
     const formRules = ctx.rules && prop && ctx.rules[prop];
     const rules = this.props.rules || formRules;
-    const defaultRequired = [{ required: true, message: 'required', trigger: 'blur' }];
+    const defaultRequired = [{ required: true, message: '不能为空', trigger: 'blur' }];
     if (!rules) {
       return required ? defaultRequired : [];
     }
@@ -120,7 +126,8 @@ export class FormItemComponent extends React.Component<IFormItemProps, any> {
     });
   }
 
-  getValueFromComponent(e: any) {
+  getValueFromComponent(...args: any) {
+    const e = args[0];
     if (!e || !e.target) {
       return e;
     }
@@ -128,8 +135,9 @@ export class FormItemComponent extends React.Component<IFormItemProps, any> {
     return target.type === 'checkbox' ? target.checked : target.value;
   }
 
-  handleChange = (e: any) => {
-    const value = this.getValueFromComponent(e);
+  handleChange = (...args: any) => {
+    const getValue = this.props.getValueFromComponent || this.getValueFromComponent;
+    const value = getValue(...args);
     this.setState({ value }, () => {
       this.validate('change');
     });
@@ -158,7 +166,7 @@ export class FormItemComponent extends React.Component<IFormItemProps, any> {
     const result: any = {};
     const { labelPosition } = this.props.ctx;
     const labelWidth = this.props.labelWidth || this.props.ctx.labelWidth;
-    if (labelPosition === 'top') return { float: 'none' };
+    if (labelPosition === 'top') return { ...result, ...this.props.labelStyle };
 
     result.textAlign = labelPosition;
 
@@ -166,7 +174,7 @@ export class FormItemComponent extends React.Component<IFormItemProps, any> {
       result.width = labelWidth;
     }
 
-    return result;
+    return { ...result, ...this.props.labelStyle };
   }
 
   contentStyle() {
@@ -184,6 +192,17 @@ export class FormItemComponent extends React.Component<IFormItemProps, any> {
     return result;
   }
 
+  componentDidUpdate(prevProps: IFormItemProps) {
+    const initialValue = JSON.stringify(this.props.initialValue);
+    const oldInitialValue = JSON.stringify(prevProps.initialValue);
+    const value = JSON.stringify(this.state.value);
+    if (oldInitialValue !== initialValue && initialValue !== value) {
+      this.setState({
+        value: this.props.initialValue
+      });
+    }
+  }
+
   componentDidMount() {
     const { prop, ctx } = this.props;
     if (prop) {
@@ -197,7 +216,20 @@ export class FormItemComponent extends React.Component<IFormItemProps, any> {
   }
 
   public render() {
-    const { label, prop, ctx, valuePropName, trigger } = this.props;
+    const {
+      label,
+      prop,
+      ctx,
+      valuePropName,
+      trigger,
+      initialValue,
+      rules,
+      required,
+      labelWidth,
+      labelStyle,
+      getValueFromComponent,
+      ...rest
+    } = this.props;
     const { error, valid } = this.state;
     const children = this.props.children!;
     let items = children;
@@ -205,7 +237,9 @@ export class FormItemComponent extends React.Component<IFormItemProps, any> {
       items = React.Children.map(children, (child, index) => {
         if (index === 0 && React.isValidElement(child)) {
           const defaultTrigger = (child.props as any).onChange;
+          const disabled = (child.props as any).disabled || ctx.disabled;
           return React.cloneElement<any>(child, {
+            disabled,
             [valuePropName!]: this.state.value,
             [trigger!]: this.getTriggerHandle(defaultTrigger)
           });
@@ -221,7 +255,12 @@ export class FormItemComponent extends React.Component<IFormItemProps, any> {
       'is-required': this.isRequired()
     });
     return (
-      <div className={itemClasses} onBlur={this.handleBlur}>
+      <div
+        {...rest}
+        className={itemClasses}
+        onBlur={this.handleBlur}
+        // {...{ [trigger!]: defaultTrigger ? this.handleChange : undefined }}
+      >
         {label && (
           <label className={labelClasses} style={this.getLabelStyle()}>
             {label + ctx.labelSuffix}
@@ -236,6 +275,6 @@ export class FormItemComponent extends React.Component<IFormItemProps, any> {
   }
 }
 
-export default (props: Omit<IFormItemProps, 'ctx'>) => (
+export default (props: IFormItemWithoutCtxProp) => (
   <Consumer>{(ctx) => <FormItemComponent {...props} ctx={ctx} />}</Consumer>
 );
