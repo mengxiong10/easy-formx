@@ -2,6 +2,7 @@ import React, { useEffect, useContext } from 'react';
 import { DispatchContext } from './FormContext';
 import classNames from 'classnames';
 import _get from 'lodash/get';
+import { LabelPosition, LabelWidth } from './Form';
 
 export interface FormItemProp extends React.HTMLAttributes<HTMLDivElement> {
   label?: string;
@@ -11,7 +12,7 @@ export interface FormItemProp extends React.HTMLAttributes<HTMLDivElement> {
   valuePropName?: string;
 }
 
-function getStyle(labelPosition, labelWidth) {
+function getStyle(labelPosition: LabelPosition, labelWidth: LabelWidth) {
   const label: any = {};
   const content: any = {};
   if (labelPosition === 'left' || labelPosition === 'right') {
@@ -50,14 +51,14 @@ export function FormItem(props: FormItemProp) {
   const error = prop && _get(formStatus, prop);
   const message = error && error.message;
 
-  const handleChange = (...args) => {
+  const handleChange = (...args: any[]) => {
     const e = args[0];
     if (!e || !e.target) {
       return e;
     }
     const { target } = e;
     const value = target.type === 'checkbox' ? target.checked : target.value;
-    setState({ [prop]: value });
+    setState({ [prop!]: value });
     validateItem({ trigger: 'change', prop, value });
   };
 
