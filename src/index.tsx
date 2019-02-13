@@ -1,5 +1,8 @@
 import './Form.scss';
+import { DispatchContext } from './FormContext';
 
-export { default as Form } from './Form';
+export { useForm } from './Form';
 
-export { default as FormItem } from './FormItem';
+export { FormItem } from './FormItem';
+
+export const { Provider: FormProvider } = DispatchContext;

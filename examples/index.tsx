@@ -68,22 +68,21 @@ class Demo extends React.Component<IDemoProps, IDemoState> {
   }
 }
 
-class App extends React.Component<{}, any> {
-  componentDidMount() {
+function App() {
+  React.useEffect(() => {
     Prism.highlightAll();
-  }
-  public render() {
-    return (
-      <div className="container">
-        <Demo code={BasicCode} title="Basic">
-          <Basic />
-        </Demo>
-        <Demo code={DynamicCode} title="Dynamic">
-          <Dynamic />
-        </Demo>
-      </div>
-    );
-  }
+  }, []);
+
+  return (
+    <div className="container">
+      <Demo code={BasicCode} title="Basic">
+        <Basic />
+      </Demo>
+      <Demo code={DynamicCode} title="Dynamic">
+        <Dynamic />
+      </Demo>
+    </div>
+  );
 }
 
 ReactDOM.render(<App />, document.getElementById('root') as HTMLElement);

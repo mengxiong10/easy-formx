@@ -1,17 +1,12 @@
 {
   "extends": ["tslint:recommend", "tslint-react", "tslint-config-prettier"],
   "rules": {
+    "interface-name": [true, "never-prefix"],
     "indent": [true, "spaces", 2],
     "semicolon": [true, "always"],
     "trailing-comma": [true, { "multiline": "never", "singleline": "never" }],
     "quotemark": [true, "single", "avoid-escape", "jsx-double"],
-    "ban-types": [
-      true,
-      ["Object", "Use {} instead."],
-      ["String"],
-      ["Boolean"],
-      ["Number"]
-    ],
+    "ban-types": [true, ["Object", "Use {} instead."], ["String"], ["Boolean"], ["Number"]],
     "no-any": false,
     "no-console": [true, "log"],
     "no-conditional-assignment": true,
