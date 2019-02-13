@@ -1,4 +1,4 @@
-import './Form.scss';
+import './index.scss';
 import { DispatchContext } from './FormContext';
 
 export { useForm } from './Form';

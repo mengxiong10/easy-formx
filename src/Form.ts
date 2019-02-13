@@ -27,7 +27,7 @@ export function useForm(formProps: FormProps) {
       return [];
     }
     const rules = [].concat(formProps.rules[prop]);
-    return rules.filter((rule) => {
+    return rules.filter((rule: any) => {
       return !rule.trigger || rule.trigger.indexOf(trigger) !== -1;
     });
   }
@@ -39,7 +39,7 @@ export function useForm(formProps: FormProps) {
       validator.validate(formState, (errors: any) => {
         if (errors) {
           setStatus(
-            errors.reduce((acc, cur) => {
+            errors.reduce((acc: any, cur: any) => {
               return { ...acc, [cur.field]: cur };
             }, {})
           );
