@@ -5,7 +5,7 @@ import * as React from 'react';
 export default function Dynamic() {
   const [keys, setKeys] = React.useState([0]);
   const formValue = useForm({
-    initialState: {
+    initialData: {
       values: [10]
     },
     labelWidth: '100px',

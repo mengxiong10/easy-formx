@@ -2,6 +2,8 @@ import { useForm, FormProvider, FormItem } from '../src';
 import { Input, Radio, Button, InputNumber } from 'antd';
 import * as React from 'react';
 
+// const { Formx, ...rest } = createContainer()
+
 export default function Basic() {
   const rules = {
     name: { required: true, message: 'required', trigger: 'blur' },
@@ -10,10 +12,10 @@ export default function Basic() {
 
   const [position, setPosition] = React.useState('right');
 
-  const initialState = { name: 'ok', description: 'haha' };
+  const initialData = { name: 'ok', description: 'haha' };
 
   const formValue = useForm({
-    initialState,
+    initialData,
     labelWidth: '100px',
     labelPosition: position as 'left' | 'right' | 'top',
     rules

@@ -37,18 +37,18 @@ export function FormItem(props: FormItemProp) {
     ...rest
   } = props;
 
-  const { formState, setState, formStatus, validateItem, formProps } = useContext(DispatchContext);
+  const { formProps, formState, setState } = useContext(DispatchContext);
 
   useEffect(() => {
     return () => {
       if (prop) {
-        setState({ [prop]: undefined });
+        setState({ type: 'change', value: { [prop!]: undefined } });
       }
     };
   }, []);
 
-  const state = prop && _get(formState, prop);
-  const error = prop && _get(formStatus, prop);
+  const state = prop && _get(formState.data, prop);
+  const error = prop && _get(formState.status, prop);
   const message = error && error.message;
 
   const handleChange = (...args: any[]) => {
@@ -58,12 +58,13 @@ export function FormItem(props: FormItemProp) {
     }
     const { target } = e;
     const value = target.type === 'checkbox' ? target.checked : target.value;
-    setState({ [prop!]: value });
-    validateItem({ trigger: 'change', prop, value });
+    setState({ type: 'change', value: { [prop!]: value } });
   };
 
   const handleBlur = () => {
-    validateItem({ trigger: 'blur', value: state, prop });
+    if (prop) {
+      setState({ type: 'blur', value: { [prop]: state } });
+    }
   };
 
   const isRequired = () => {
