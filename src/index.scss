@@ -13,7 +13,7 @@ $item-height: 39px;
   vertical-align: top;
 }
 
-.easy-formx-item__with-help {
+.easy-formx-item--with-help {
   margin-bottom: 6px;
 }
 
@@ -24,7 +24,6 @@ $item-height: 39px;
   font-size: 14px;
   color: $label-color;
   line-height: $item-height;
-  padding-right: 8px;
   box-sizing: border-box;
   &.is-required::before {
     display: inline-block;
@@ -35,6 +34,15 @@ $item-height: 39px;
     font-size: 14px;
     color: $color-red;
   }
+  .easy-formx--label-top & {
+    float: none;
+    display: inline-block;
+    text-align: left;
+  }
+}
+
+.esay-formx-item__suffix {
+  margin: 0 8px 0 2px;
 }
 
 .easy-formx-item__content {

@@ -1,8 +1,7 @@
-import { useForm, FormProvider, FormItem } from '../src';
+import { useFormx, Formx, FormxItem } from '../src';
 import { Input, Radio, Button, InputNumber } from 'antd';
+import { DisplayState } from './helper';
 import * as React from 'react';
-
-// const { Formx, ...rest } = createContainer()
 
 export default function Basic() {
   const rules = {
@@ -10,25 +9,18 @@ export default function Basic() {
     description: { required: true, message: 'required', trigger: 'blur' }
   };
 
-  const [position, setPosition] = React.useState('right');
+  const [position, setPosition] = React.useState<'left' | 'right' | 'top'>('right');
 
-  const initialData = { name: 'ok', description: 'haha' };
+  const initialData = { name: 'ok', description: 'haha', number: 2 };
 
-  const formValue = useForm({
-    initialData,
-    labelWidth: '100px',
-    labelPosition: position as 'left' | 'right' | 'top',
-    rules
-  });
-
-  const { validate } = formValue;
+  const { bindFormx, data, validate } = useFormx(initialData);
 
   const handleChange = (e: any) => {
     setPosition(e.target.value);
   };
 
   const submit = () => {
-    validate().then((res) => {
+    validate(rules).then((res) => {
       console.log(res);
     });
   };
@@ -47,23 +39,24 @@ export default function Basic() {
         <Radio.Button value="right">right</Radio.Button>
         <Radio.Button value="top">top</Radio.Button>
       </Radio.Group>
-      <FormProvider value={formValue}>
-        <FormItem label="Name" prop="name">
+      <Formx labelWidth="100px" labelPosition={position}>
+        <FormxItem label="Name" {...bindFormx('name')}>
           <Input />
-        </FormItem>
-        <FormItem label="Description" prop="description">
+        </FormxItem>
+        <FormxItem label="Description" {...bindFormx('description')}>
           <Input />
-        </FormItem>
-        <FormItem label="Number" prop="number">
-          <InputNumber />
-          <span style={{ marginLeft: 10 }}>(tip)</span>
-        </FormItem>
-        <FormItem>
+        </FormxItem>
+        <FormxItem label="Number" {...bindFormx('number')}>
+          <InputNumber min={0} max={10} />
+          <span style={{ marginLeft: 10 }}>(min: 0, max: 10)</span>
+        </FormxItem>
+        <FormxItem>
           <Button type="primary" onClick={submit}>
             submit
           </Button>
-        </FormItem>
-      </FormProvider>
+        </FormxItem>
+      </Formx>
+      <DisplayState {...data} />
     </div>
   );
 }

@@ -1,16 +1,16 @@
-import { useForm, FormProvider, FormItem } from '../src';
+import { useFormx, Formx, FormxItem } from '../src';
 import { Input, Button, Icon } from 'antd';
 import * as React from 'react';
+import { DisplayState } from './helper';
 
 export default function Dynamic() {
-  const [keys, setKeys] = React.useState([0]);
-  const formValue = useForm({
-    initialData: {
-      values: [10]
-    },
-    labelWidth: '100px',
-    labelPosition: 'right'
+  const values = ['test1', 'test2'];
+
+  const { bindFormx, data } = useFormx({
+    values
   });
+
+  const [keys, setKeys] = React.useState(values.map((_, i) => i));
 
   const add = () => {
     setKeys(keys.concat(keys[keys.length - 1] + 1));
@@ -21,7 +21,7 @@ export default function Dynamic() {
   };
 
   const items = keys.map((key, i) => (
-    <FormItem key={key} prop={`values[${key}]`}>
+    <FormxItem {...bindFormx(`values[${key}]`)}>
       <Input style={{ width: '60%', marginRight: 8 }} />
       {keys.length > 1 ? (
         <Icon
@@ -30,16 +30,19 @@ export default function Dynamic() {
           onClick={() => remove(key)}
         />
       ) : null}
-    </FormItem>
+    </FormxItem>
   ));
   return (
-    <FormProvider value={formValue}>
-      {items}
-      <FormItem>
-        <Button type="dashed" onClick={add}>
-          <Icon type="plus" /> Add field
-        </Button>
-      </FormItem>
-    </FormProvider>
+    <div>
+      <Formx>
+        {items}
+        <FormxItem>
+          <Button type="dashed" onClick={add}>
+            <Icon type="plus" /> Add field
+          </Button>
+        </FormxItem>
+      </Formx>
+      <DisplayState {...data} />
+    </div>
   );
 }

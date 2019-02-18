@@ -1,0 +1,16 @@
+import * as React from 'react';
+
+export type LabelPosition = 'right' | 'left' | 'top';
+export type LabelWidth = string | number;
+
+export interface FormxContextValue {
+  labelPosition?: LabelPosition;
+  labelWidth?: LabelWidth;
+  labelSuffix?: string;
+  rules?: object;
+  disabled?: boolean;
+}
+
+const FormxContext = React.createContext<FormxContextValue>({} as any);
+
+export default FormxContext;
