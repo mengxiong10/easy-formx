@@ -11,7 +11,7 @@ export default function Basic() {
 
   const [position, setPosition] = React.useState<'left' | 'right' | 'top'>('right');
 
-  const initialData = { name: 'ok', description: 'haha', number: 2 };
+  const initialData = { name: 'name', description: 'description', number: 22 };
 
   const { bindFormx, data, validate } = useFormx(initialData);
 
@@ -39,7 +39,7 @@ export default function Basic() {
         <Radio.Button value="right">right</Radio.Button>
         <Radio.Button value="top">top</Radio.Button>
       </Radio.Group>
-      <Formx labelWidth="100px" labelPosition={position}>
+      <Formx labelWidth="100px" labelPosition={position} rules={rules}>
         <FormxItem label="Name" {...bindFormx('name')}>
           <Input />
         </FormxItem>
@@ -47,8 +47,8 @@ export default function Basic() {
           <Input />
         </FormxItem>
         <FormxItem label="Number" {...bindFormx('number')}>
-          <InputNumber min={0} max={10} />
-          <span style={{ marginLeft: 10 }}>(min: 0, max: 10)</span>
+          <InputNumber min={0} max={100} />
+          <span style={{ marginLeft: 10 }}>(min: 0, max: 100)</span>
         </FormxItem>
         <FormxItem>
           <Button type="primary" onClick={submit}>
