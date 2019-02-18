@@ -18,40 +18,100 @@
 $ npm install easy-formx --save
 ```
 
-### Form Props
+## Useage
 
-| Prop          | Type           | Default | Description                                 |
-| ------------- | -------------- | ------- | ------------------------------------------- |
-| labelPosition | string         | 'right' | position of label(left/right/top)           |
-| labelWidth    | string\|number | -       | all Form items width will inherit from this |
-| labelSuffix   | string         | ':'     | suffix of the label                         |
-| rules         | object         | -       | validation rules of form                    |
+```tsx
+import { useFormx, Formx, FormxItem } from '../src';
 
-### Form Methods
+const rules = {
+  name: { required: true, message: 'required', trigger: 'blur' },
+  description: { required: true, message: 'required', trigger: 'blur' }
+};
+
+const initialData = { name: 'name', description: 'description', number: 22 };
+
+export default function Basic() {
+  const { bindFormx, data, validate } = useFormx(initialData);
+
+  const submit = () => {
+    validate(rules).then((res) => {
+      console.log(res);
+    });
+  };
+
+  return (
+    <Formx labelWidth="100px" labelPosition={position} rules={rules}>
+      <FormxItem label="Name" {...bindFormx('name')}>
+        <Input />
+      </FormxItem>
+      <FormxItem label="Description" {...bindFormx('description')}>
+        <Input />
+      </FormxItem>
+      <FormxItem label="Number" {...bindFormx('number')}>
+        <InputNumber min={0} max={100} />
+        <span style={{ marginLeft: 10 }}>(min: 0, max: 100)</span>
+      </FormxItem>
+      <FormxItem>
+        <Button type="primary" onClick={submit}>
+          submit
+        </Button>
+      </FormxItem>
+    </Formx>
+  );
+}
+```
+
+## API
+
+### useFormx
+
+```js
+const { bindFormx, data, validate, setFieldsValue } = useFormx(initialData);
+```
+
+#### bindFormx
+
+A function that returns the appropriate props that can be spread on the `FormxItem`.
+
+After bind `FormxItem` by bindFormx, value(or other property defined by valuePropName) onChange(or other property defined by trigger) props will be added to first child comoponent.
+
+#### setFieldsValue
+
+```js
+setFieldsValue({ name: 'name', age: 'age' });
+```
+
+Set the value of fields
+
+#### validate
+
+```js
+validate(rules).then();
+```
+
+validate all fields
+
+### Formx
 
 <!-- prettier-ignore-start -->
 
-| Method         | Type                                   | Description |
-| -------------- | -------------------------------------- | ----------- |
-| validate       | () => Promise<{\[fieldName\] : any }>  | validate all fields |
-| getFieldsValue | (fieldNames[]) => {\[fieldName\]: any} | Get the specified fields' values.When parameter is undefined, return all fields' value   |
-| setFieldsValue | ({\[fieldName\]: any}) => void         | Set the specified fields' values. |
-| resetFields    |                                        | Reset the specified fields' values.When parameter is undefined, all fields will be reset |
+| Prop          | Description       | Type                       | Default  |
+| ------------- | ----------------- | -------------------------- | -------- |
+| labelPosition | position of label | 'right' \| 'left' \| 'top' | 'right' |
+| labelWidth    | all Form items width will inherit from this | string\|number | - |
+| labelSuffix   | suffix of the label | `string` | ':' |
+| rules         | validation rules of form | `object`| - |
 
 <!-- prettier-ignore-end -->
 
-### FormItem Props
+### FormxItem
 
-| Prop          | Type           | Default    | Description                                                                             |
-| ------------- | -------------- | ---------- | --------------------------------------------------------------------------------------- |
-| prop          | string         | -          | Two-way binding for the form, the unique field name,support nested value(a.b \| a\[0\]) |
-| initialValue  | any            | ''         | The form item initialValue and the reset value                                          |
-| label         | string         | -          | The label text                                                                          |
-| rules         | object[]       | -          | Validation rules of form item                                                           |
-| labelWidth    | string\|number | -          | The label width                                                                         |
-| required      | boolean        | false      | A quick way to set rules([{ required: true, message: 'required', trigger: 'blur' }])    |
-| trigger       | string         | 'onChange' | When to collect the value of children node                                              |
-| valuePropName | string         | 'value'    | children node value prop.                                                               |
+| Prop          | Description                               | Type     | Default    |
+| ------------- | ----------------------------------------- | -------- | ---------- |
+| label         | The label text                            | `string` | -          |
+| labelStyle    | The label style                           | `object` | -          |
+| trigger       | prop of listen children node value change | `string` | 'onChange' |
+| valuePropName | prop of children node value               | `string` | 'value'    |
 
 ## License
 
