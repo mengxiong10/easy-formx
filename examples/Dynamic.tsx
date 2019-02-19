@@ -4,13 +4,13 @@ import * as React from 'react';
 import { DisplayState } from './helper';
 
 export default function Dynamic() {
-  const values = ['test1', 'test2'];
+  const fields = ['test1', 'test2'];
 
-  const { bindFormx, data } = useFormx({
-    values
+  const { bindFormx, value } = useFormx({
+    fields
   });
 
-  const [keys, setKeys] = React.useState(values.map((_, i) => i));
+  const [keys, setKeys] = React.useState(fields.map((_, i) => i));
 
   const add = () => {
     setKeys(keys.concat(keys[keys.length - 1] + 1));
@@ -21,7 +21,7 @@ export default function Dynamic() {
   };
 
   const items = keys.map((key, i) => (
-    <FormxItem {...bindFormx(`values[${key}]`)}>
+    <FormxItem {...bindFormx(`fields[${key}]`)}>
       <Input style={{ width: '60%', marginRight: 8 }} />
       {keys.length > 1 ? (
         <Icon
@@ -42,7 +42,7 @@ export default function Dynamic() {
           </Button>
         </FormxItem>
       </Formx>
-      <DisplayState {...data} />
+      <DisplayState {...value} />
     </div>
   );
 }

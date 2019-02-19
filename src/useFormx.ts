@@ -1,95 +1,132 @@
-import { useReducer } from 'react';
+import { useReducer, Reducer, useCallback } from 'react';
 import Schema from 'async-validator';
 import _set from 'lodash/set';
 import _get from 'lodash/get';
+import _find from 'lodash/find';
 
-export interface PayloadValidate {
-  type: 'validate';
+export interface FormState<R> {
+  value: R;
+  error: object;
+}
+
+export interface BindFormxProps {
   key: string;
+  prop: string;
   value: any;
-  rules: any;
+  error: { message: string };
+  getRules: (prop: string, trigger?: string) => any;
+  setFieldsValue: (value: object) => void;
+  validate: (keys?: string[], trigger?: 'change' | 'blur') => void;
 }
 
-export interface PayloadChange {
-  type: 'change';
-  key: string;
-  value: any;
-}
-
-export interface PayloadSetData {
-  type: 'setData';
-  data: any;
-}
-
-export interface PayloadSet {
-  type: 'set';
-  data?: any;
-  status?: any;
-}
-
-export interface FormState {
+type Payload = {
+  type: 'setValue' | 'setError';
   data: object;
-  status: object;
+};
+
+function init(initialValue: any) {
+  return { value: initialValue, error: {} };
 }
 
-type Payload = PayloadChange | PayloadValidate | PayloadSetData | PayloadSet;
+function reducer(state: FormState<any>, payload: Payload) {
+  let { value, error } = state;
+  const { type, data } = payload;
+  switch (type) {
+    case 'setValue':
+      Object.keys(data).forEach((key) => {
+        _set(value, key, data[key]);
+      });
+      return { value, error };
+    case 'setError':
+      Object.keys(data).forEach((key) => {
+        _set(error, key, data[key]);
+      });
+      return { value, error };
+    default:
+      throw new Error();
+  }
+}
 
-function useFormx(initialData: object = {}) {
-  const [formState, dispatch] = useReducer(
-    (state: FormState, payload: Payload) => {
-      let { data, status } = state;
-      const { type } = payload;
-      if (type === 'change') {
-        const { key, value } = payload as PayloadChange;
-        _set(data, key, value);
-      } else if (type === 'validate') {
-        const { key, value, rules } = payload as PayloadValidate;
-        const validator = new Schema({ [key]: rules });
-        validator.validate({ [key]: value }, { first: true }, (errors?: any[]) => {
-          _set(status, key, errors && errors[0]);
-        });
-      } else if (type === 'setData') {
-        data = { ...data, ...(payload as PayloadSetData).data };
-      } else if (type === 'set') {
-        const { type, ...rest } = payload as PayloadSet;
-        return { ...state, ...rest };
-      }
-      return { data, status };
-    },
-    {
-      data: initialData,
-      status: {}
-    }
+function useFormx<T extends object>(initialValue: T = {} as any, rules?: object) {
+  const [formState, dispatch] = useReducer<Reducer<FormState<T>, Payload>, T>(
+    reducer,
+    initialValue,
+    init
   );
 
-  const validate = (rules: any) => {
+  const setFieldsValue = useCallback(
+    (data: object) => {
+      dispatch({ type: 'setValue', data });
+    },
+    [dispatch]
+  );
+
+  const setFieldsError = useCallback(
+    (data: object) => {
+      dispatch({ type: 'setError', data });
+    },
+    [dispatch]
+  );
+
+  const getRules = (prop: string, trigger?: string) => {
+    if (!rules || !rules[prop]) {
+      return undefined;
+    }
+    const result = Array.isArray(rules[prop]) ? rules[prop] : [rules[prop]];
+    if (!trigger) {
+      return result;
+    }
+    return result.filter((rule: any) => {
+      return !rule.trigger || rule.trigger.indexOf(trigger) !== -1;
+    });
+  };
+
+  const validate = (keys?: string[], trigger?: 'change' | 'blur') => {
+    const allKeys = Object.keys(formState.value);
+    const validKeys = keys ? keys.filter((v) => allKeys.indexOf(v) !== -1) : allKeys;
+    const descriptor: any = {};
+    const data: any = {};
+    validKeys.forEach((key) => {
+      const rule = getRules(key, trigger);
+      const value = _get(formState.value, key);
+      data[key] = value;
+      if (rule && rule.length) {
+        descriptor[key] = rule;
+      }
+    });
+    if (Object.keys(descriptor).length === 0) {
+      return Promise.resolve(data);
+    }
     return new Promise((resolve, reject) => {
-      const validator = new Schema(rules);
-      validator.validate(formState.data, (errors: any[]) => {
+      const validator = new Schema(descriptor);
+      validator.validate(data, (errors: any[]) => {
+        const error: any = {};
+        validKeys.forEach((key) => {
+          error[key] = errors && _find(errors, (o) => o.field === key);
+        });
+        setFieldsError(error);
         if (errors) {
-          const value = errors.reduce((acc, cur) => {
-            return { ...acc, [cur.field]: cur };
-          }, {});
-          dispatch({ type: 'set', status: value });
-          reject(value);
+          reject(error);
         } else {
-          resolve({ ...formState.data });
+          resolve(data);
         }
       });
     });
   };
 
-  const bindFormx = (prop: string) => {
+  const bindFormx = (prop: string): BindFormxProps => {
     return {
-      dispatch,
+      setFieldsValue,
+      validate,
+      getRules,
       prop,
       key: prop,
-      value: _get(formState.data, prop),
-      error: _get(formState.status, prop)
+      value: _get(formState.value, prop),
+      error: _get(formState.error, prop)
     };
   };
 
-  return { ...formState, dispatch, validate, bindFormx };
+  return { ...formState, bindFormx, validate, setFieldsValue, setFieldsError };
 }
 
 export default useFormx;

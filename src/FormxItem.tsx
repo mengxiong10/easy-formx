@@ -1,17 +1,10 @@
 import React, { useEffect, useContext } from 'react';
 import FormxContext, { LabelPosition, LabelWidth } from './FormxContext';
+import { BindFormxProps } from './useFormx';
 import classNames from 'classnames';
 import _get from 'lodash/get';
 
-export interface FormxItemBindProps {
-  key: string;
-  prop: string;
-  value: any;
-  error: { message: string };
-  dispatch: (payload: any) => void;
-}
-
-export interface FormxItemProps extends Partial<FormxItemBindProps> {
+export interface FormxItemProps extends Partial<BindFormxProps> {
   label?: string;
   labelStyle?: object;
   trigger?: string;
@@ -50,7 +43,9 @@ function FormxItem(props: FormxItemProps & React.HTMLAttributes<HTMLDivElement>)
     prop,
     value,
     error,
-    dispatch,
+    getRules,
+    setFieldsValue,
+    validate,
     label,
     labelStyle,
     trigger = 'onChange',
@@ -59,49 +54,36 @@ function FormxItem(props: FormxItemProps & React.HTMLAttributes<HTMLDivElement>)
     ...rest
   } = props;
 
-  const { rules, labelPosition, labelSuffix, labelWidth, disabled } = useContext(FormxContext);
+  const { labelPosition, labelSuffix, labelWidth, disabled } = useContext(FormxContext);
 
   useEffect(() => {
     return () => {
-      if (dispatch) {
-        dispatch({ type: 'change', key: prop, value: undefined });
+      if (setFieldsValue && prop) {
+        setFieldsValue({ [prop]: undefined });
       }
     };
   }, []);
 
   const message = error && error.message;
 
-  const getRules = (trigger: string) => {
-    if (!rules || !prop || !rules[prop]) {
-      return null;
-    }
-    return [].concat(rules[prop]).filter((rule: any) => {
-      return !rule.trigger || rule.trigger.indexOf(trigger) !== -1;
-    });
-  };
-
   const handleChange = (event: any) => {
     const value = getValue(event);
-    if (dispatch) {
-      const rules = getRules('change');
-      dispatch({ type: 'change', key: prop, value });
-      if (rules && rules.length) {
-        dispatch({ type: 'validate', key: prop, value, rules });
+    if (setFieldsValue && prop) {
+      setFieldsValue({ [prop]: value });
+      if (validate) {
+        validate([prop], 'change');
       }
     }
   };
 
   const handleBlur = () => {
-    if (dispatch) {
-      const rules = getRules('blur');
-      if (rules && rules.length) {
-        dispatch({ type: 'validate', key: prop, value, rules });
-      }
+    if (setFieldsValue && prop && validate) {
+      validate([prop], 'blur');
     }
   };
 
   const isRequired = () => {
-    let data = prop && rules && rules[prop];
+    let data = prop && getRules && getRules(prop);
     if (data) {
       data = [].concat(data);
       for (let index = 0; index < data.length; index++) {

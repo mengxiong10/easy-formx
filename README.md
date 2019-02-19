@@ -66,7 +66,7 @@ export default function Basic() {
 ### useFormx
 
 ```js
-const { bindFormx, data, validate, setFieldsValue } = useFormx(initialData);
+const { bindFormx, value, validate, setFieldsValue, setFieldsError } = useFormx(initialValue);
 ```
 
 #### bindFormx
@@ -86,7 +86,7 @@ Set the value of fields
 #### validate
 
 ```js
-validate(rules).then();
+validate().then();
 ```
 
 validate all fields

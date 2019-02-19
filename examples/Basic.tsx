@@ -3,24 +3,24 @@ import { Input, Radio, Button, InputNumber } from 'antd';
 import { DisplayState } from './helper';
 import * as React from 'react';
 
-export default function Basic() {
-  const rules = {
-    name: { required: true, message: 'required', trigger: 'blur' },
-    description: { required: true, message: 'required', trigger: 'blur' }
-  };
+const rules = {
+  name: { required: true, message: 'required', trigger: 'blur' },
+  description: { required: true, message: 'required', trigger: 'blur' }
+};
 
+const initialValue = { name: 'name', description: 'description', number: 22 };
+
+export default function Basic() {
   const [position, setPosition] = React.useState<'left' | 'right' | 'top'>('right');
 
-  const initialData = { name: 'name', description: 'description', number: 22 };
-
-  const { bindFormx, data, validate } = useFormx(initialData);
+  const { bindFormx, value, validate } = useFormx<typeof initialValue>(initialValue, rules);
 
   const handleChange = (e: any) => {
     setPosition(e.target.value);
   };
 
   const submit = () => {
-    validate(rules).then((res) => {
+    validate().then((res) => {
       console.log(res);
     });
   };
@@ -39,7 +39,7 @@ export default function Basic() {
         <Radio.Button value="right">right</Radio.Button>
         <Radio.Button value="top">top</Radio.Button>
       </Radio.Group>
-      <Formx labelWidth="100px" labelPosition={position} rules={rules}>
+      <Formx labelWidth="100px" labelPosition={position}>
         <FormxItem label="Name" {...bindFormx('name')}>
           <Input />
         </FormxItem>
@@ -56,7 +56,7 @@ export default function Basic() {
           </Button>
         </FormxItem>
       </Formx>
-      <DisplayState {...data} />
+      <DisplayState {...value} />
     </div>
   );
 }
