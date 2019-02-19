@@ -20,8 +20,8 @@ $ npm install easy-formx --save
 
 ## Usage
 
-```tsx
-import { useFormx, Formx, FormxItem } from '../src';
+```jsx
+import { useFormx, Formx, FormxItem } from 'easy-formx';
 
 const rules = {
   name: { required: true, message: 'required', trigger: 'blur' },

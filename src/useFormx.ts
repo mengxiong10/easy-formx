@@ -4,11 +4,6 @@ import _set from 'lodash/set';
 import _get from 'lodash/get';
 import _find from 'lodash/find';
 
-export interface FormState<R> {
-  value: R;
-  error: object;
-}
-
 export interface BindFormxProps {
   key: string;
   prop: string;
@@ -19,10 +14,15 @@ export interface BindFormxProps {
   validate: (keys?: string[], trigger?: 'change' | 'blur') => void;
 }
 
-type Payload = {
+export interface FormState<T> {
+  value: T;
+  error: object;
+}
+
+export interface Payload {
   type: 'setValue' | 'setError';
   data: object;
-};
+}
 
 function init(initialValue: any) {
   return { value: initialValue, error: {} };
