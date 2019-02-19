@@ -7,7 +7,6 @@ export interface FormxContextValue {
   labelPosition?: LabelPosition;
   labelWidth?: LabelWidth;
   labelSuffix?: string;
-  rules?: object;
   disabled?: boolean;
 }
 

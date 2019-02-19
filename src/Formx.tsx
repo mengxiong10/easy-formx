@@ -9,12 +9,11 @@ function Formx(props: FormxContextValue & React.HTMLAttributes<HTMLFormElement>)
     labelPosition = 'right',
     labelSuffix = ':',
     labelWidth,
-    rules,
     disabled,
     className,
     ...restProps
   } = props;
-  const formProps = { labelPosition, labelWidth, labelSuffix, rules, disabled };
+  const formProps = { labelPosition, labelWidth, labelSuffix, disabled };
   const memoized = useMemo(
     () => {
       return formProps;
