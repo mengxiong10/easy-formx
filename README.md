@@ -18,7 +18,7 @@
 $ npm install easy-formx --save
 ```
 
-## Useage
+## Usage
 
 ```tsx
 import { useFormx, Formx, FormxItem } from '../src';
@@ -28,19 +28,19 @@ const rules = {
   description: { required: true, message: 'required', trigger: 'blur' }
 };
 
-const initialData = { name: 'name', description: 'description', number: 22 };
+const initialValue = { name: 'name', description: 'description', number: 22 };
 
 export default function Basic() {
-  const { bindFormx, data, validate } = useFormx(initialData);
+  const { bindFormx, value, validate } = useFormx(initialValue, rules);
 
   const submit = () => {
-    validate(rules).then((res) => {
-      console.log(res);
+    validate().then((data) => {
+      console.log(data);
     });
   };
 
   return (
-    <Formx labelWidth="100px" labelPosition={position} rules={rules}>
+    <Formx labelWidth="100px" labelPosition={position}>
       <FormxItem label="Name" {...bindFormx('name')}>
         <Input />
       </FormxItem>
