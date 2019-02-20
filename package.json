@@ -26,7 +26,7 @@
     "build": "npm run css && rollup -c",
     "start": "rollup -c -w",
     "dev": "parcel example.html",
-    "build:example": "parcel build ./index.html --public-url ./ --out-dir examples/dist --no-source-maps",
+    "build:example": "parcel build ./example.html --public-url ./ --out-dir examples/dist --no-source-maps",
     "deploy": "npm run build:example && gh-pages -d examples/dist",
     "format": "prettier --write src/**/* test/**/*"
   },
