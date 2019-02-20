@@ -19,6 +19,6 @@
     "noUnusedParameters": true,
     "esModuleInterop": true
   },
-  "include": ["src", "test"],
+  "include": ["src", "test", "typings"],
   "exclude": ["node_modules", "build", "dist", "example", "rollup.config.js"]
 }
