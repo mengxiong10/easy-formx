@@ -19,7 +19,10 @@ const buildUmd = (minify) => ({
       file: `./dist/index.umd${minify ? '.min.js' : '.js'}`,
       format: 'umd',
       exports: 'named',
-      sourcemap: true
+      sourcemap: true,
+      globals: {
+        react: 'React'
+      }
     }
   ],
   plugins: [

@@ -3,6 +3,14 @@
   "version": "0.1.0",
   "description": "a react form component to replace antd form",
   "author": "mengxiong10",
+  "files": [
+    "dist",
+    "src",
+    "test",
+    "typings",
+    "index.tx",
+    "index.scss"
+  ],
   "keywords": [
     "react",
     "hooks",
