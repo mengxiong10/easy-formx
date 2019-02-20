@@ -1,54 +1,56 @@
+import React from 'react';
 import { useFormx, Formx, FormxItem } from '../src';
 import { Input, Radio, Button, InputNumber } from 'antd';
 import { DisplayState } from './helper';
-import * as React from 'react';
+
+type LabelPosition = 'right' | 'left' | 'top';
 
 const rules = {
   name: { required: true, message: 'required', trigger: 'blur' },
   description: { required: true, message: 'required', trigger: 'blur' }
 };
 
-const initialValue = { name: 'name', description: 'description', number: 22 };
+const initialValue = {
+  name: 'name',
+  description: 'description',
+  labelPosition: 'right',
+  labelWidth: 100
+};
+
+export type ValuesOf<T extends any[]> = T[number];
 
 export default function Basic() {
-  const [position, setPosition] = React.useState<'left' | 'right' | 'top'>('right');
-
   const { bindFormx, value, validate } = useFormx<typeof initialValue>(initialValue, rules);
 
-  const handleChange = (e: any) => {
-    setPosition(e.target.value);
-  };
-
   const submit = () => {
-    validate().then((res) => {
-      console.log(res);
+    validate().then((data) => {
+      console.log(data);
     });
   };
 
+  const positionOptions = ['left', 'right', 'top'];
+
   return (
     <div>
-      <Radio.Group
-        value={position}
-        onChange={handleChange}
-        buttonStyle="solid"
-        style={{
-          marginBottom: 15
-        }}
-      >
-        <Radio.Button value="left">left</Radio.Button>
-        <Radio.Button value="right">right</Radio.Button>
-        <Radio.Button value="top">top</Radio.Button>
-      </Radio.Group>
-      <Formx labelWidth="100px" labelPosition={position}>
+      <Formx labelWidth={value.labelWidth} labelPosition={value.labelPosition as LabelPosition}>
         <FormxItem label="Name" {...bindFormx('name')}>
           <Input />
         </FormxItem>
         <FormxItem label="Description" {...bindFormx('description')}>
           <Input />
         </FormxItem>
-        <FormxItem label="Number" {...bindFormx('number')}>
-          <InputNumber min={0} max={100} />
-          <span style={{ marginLeft: 10 }}>(min: 0, max: 100)</span>
+        <FormxItem label="LabelPosition" {...bindFormx('labelPosition')}>
+          <Radio.Group buttonStyle="solid">
+            {positionOptions.map((v) => (
+              <Radio.Button key={v} value={v}>
+                {v}
+              </Radio.Button>
+            ))}
+          </Radio.Group>
+        </FormxItem>
+        <FormxItem label="LabelWidth" {...bindFormx('labelWidth')}>
+          <InputNumber min={100} max={200} />
+          <span style={{ marginLeft: 10 }}>(min: 100, max: 200)</span>
         </FormxItem>
         <FormxItem>
           <Button type="primary" onClick={submit}>

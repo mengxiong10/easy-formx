@@ -1,6 +1,6 @@
+import React, { useState } from 'react';
 import { useFormx, Formx, FormxItem } from '../src';
 import { Input, Button, Icon } from 'antd';
-import * as React from 'react';
 import { DisplayState } from './helper';
 
 export default function Dynamic() {
@@ -10,7 +10,7 @@ export default function Dynamic() {
     fields
   });
 
-  const [keys, setKeys] = React.useState(fields.map((_, i) => i));
+  const [keys, setKeys] = useState(fields.map((_, i) => i));
 
   const add = () => {
     setKeys(keys.concat(keys[keys.length - 1] + 1));
