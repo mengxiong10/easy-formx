@@ -2,7 +2,7 @@
 
 [中文版](https://github.com/mengxiong10/easy-formx/blob/master/README.zh-CN.md)
 
-> a very easy react form component.
+> a very easy react hooks form component. replace the antd form component.
 
 <a href="LICENSE">
   <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="MIT">
@@ -93,16 +93,11 @@ validate all fields
 
 ### Formx
 
-<!-- prettier-ignore-start -->
-
-| Prop          | Description       | Type                       | Default  |
-| ------------- | ----------------- | -------------------------- | -------- |
+| Prop          | Description       | Type                       | Default |
+| ------------- | ----------------- | -------------------------- | ------- |
 | labelPosition | position of label | 'right' \| 'left' \| 'top' | 'right' |
-| labelWidth    | all Form items width will inherit from this | string\|number | - |
-| labelSuffix   | suffix of the label | `string` | ':' |
-| rules         | validation rules of form | `object`| - |
-
-<!-- prettier-ignore-end -->
+| labelWidth    | width of label    | string\|number             | -       |
+| labelSuffix   | suffix of label   | `string`                   | ':'     |
 
 ### FormxItem
 
