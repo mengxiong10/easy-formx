@@ -1,14 +1,52 @@
 import typescript from 'rollup-plugin-typescript2';
 import tslint from 'rollup-plugin-tslint';
 import commonjs from 'rollup-plugin-commonjs';
-import external from 'rollup-plugin-peer-deps-external';
-import postcss from 'rollup-plugin-postcss';
 import resolve from 'rollup-plugin-node-resolve';
+import { terser } from 'rollup-plugin-terser';
 
 import pkg from './package.json';
 
-export default {
-  input: 'src/index.tsx',
+const external = (id) => !id.startsWith('.') && !id.startsWith('/');
+
+const input = 'index.ts';
+
+const buildUmd = (minify) => ({
+  input,
+  external: ['react'],
+  output: [
+    {
+      name: 'formx',
+      file: `./dist/index.umd${minify ? '.min.js' : '.js'}`,
+      format: 'umd',
+      exports: 'named',
+      sourcemap: true
+    }
+  ],
+  plugins: [
+    resolve(),
+    typescript({
+      rollupCommonJSResolveHack: true,
+      clean: true
+    }),
+    commonjs(),
+    minify &&
+      terser({
+        sourcemap: true,
+        output: { comments: false },
+        compress: {
+          keep_infinity: true,
+          pure_getters: true
+        },
+        warnings: true,
+        ecma: 5,
+        toplevel: false
+      })
+  ]
+});
+
+const buildEs = {
+  input,
+  external,
   output: [
     {
       file: pkg.main,
@@ -23,14 +61,8 @@ export default {
       sourcemap: true
     }
   ],
-  external: ['async-validator'],
   plugins: [
-    external(),
-    postcss({
-      modules: false
-    }),
     resolve(),
-    // tslint(),
     typescript({
       rollupCommonJSResolveHack: true,
       clean: true
@@ -38,3 +70,5 @@ export default {
     commonjs()
   ]
 };
+
+export default [buildUmd(true), buildUmd(false), buildEs];

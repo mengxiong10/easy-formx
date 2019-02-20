@@ -1,7 +1,8 @@
 import React from 'react';
-import { useFormx, Formx, FormxItem } from '../src';
 import { Input, Radio, Button, InputNumber } from 'antd';
 import { DisplayState } from './helper';
+import { useFormx, Formx, FormxItem } from '../index';
+import '../index.scss';
 
 type LabelPosition = 'right' | 'left' | 'top';
 

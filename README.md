@@ -22,6 +22,7 @@ $ npm install easy-formx --save
 
 ```jsx
 import { useFormx, Formx, FormxItem } from 'easy-formx';
+import 'easy-formx/index.css';
 
 const rules = {
   name: { required: true, message: 'required', trigger: 'blur' },
