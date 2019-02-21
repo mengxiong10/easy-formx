@@ -1,6 +1,7 @@
 import { useReducer, Reducer, useCallback } from 'react';
 import Schema from 'async-validator';
-import _set from 'lodash/set';
+import _clone from 'lodash/clone';
+import _setWith from 'lodash/setWith';
 import _get from 'lodash/get';
 import _find from 'lodash/find';
 
@@ -19,54 +20,56 @@ export interface FormState<T> {
   error: object;
 }
 
-export interface Payload {
-  type: 'setValue' | 'setError';
-  data: object;
+export interface Action {
+  type: 'setValue' | 'setError' | 'reset';
+  payload: object;
 }
 
 function init(initialValue: any) {
   return { value: initialValue, error: {} };
 }
 
-function reducer(state: FormState<any>, payload: Payload) {
+function reducer(state: FormState<any>, action: Action) {
   let { value, error } = state;
-  const { type, data } = payload;
+  const { type, payload } = action;
   switch (type) {
     case 'setValue':
-      Object.keys(data).forEach((key) => {
-        _set(value, key, data[key]);
+      value = _clone(value);
+      Object.keys(payload).forEach((key) => {
+        _setWith(value, key, payload[key], _clone);
       });
       return { value, error };
     case 'setError':
-      Object.keys(data).forEach((key) => {
-        _set(error, key, data[key]);
+      error = _clone(error);
+      Object.keys(payload).forEach((key) => {
+        _setWith(error, key, payload[key], _clone);
       });
       return { value, error };
+    case 'reset':
+      return init(payload);
     default:
       throw new Error();
   }
 }
 
 function useFormx<T extends object>(initialValue: T = {} as any, rules?: object) {
-  const [formState, dispatch] = useReducer<Reducer<FormState<T>, Payload>, T>(
+  const [formState, dispatch] = useReducer<Reducer<FormState<T>, Action>, T>(
     reducer,
     initialValue,
     init
   );
 
-  const setFieldsValue = useCallback(
-    (data: object) => {
-      dispatch({ type: 'setValue', data });
-    },
-    [dispatch]
-  );
+  const setFieldsValue = useCallback((payload: object) => {
+    dispatch({ type: 'setValue', payload });
+  }, []);
 
-  const setFieldsError = useCallback(
-    (data: object) => {
-      dispatch({ type: 'setError', data });
-    },
-    [dispatch]
-  );
+  const setFieldsError = useCallback((payload: object) => {
+    dispatch({ type: 'setError', payload });
+  }, []);
+
+  const resetFields = useCallback(() => {
+    dispatch({ type: 'reset', payload: initialValue });
+  }, []);
 
   const getRules = (prop: string, trigger?: string) => {
     if (!rules || !rules[prop]) {
@@ -126,7 +129,7 @@ function useFormx<T extends object>(initialValue: T = {} as any, rules?: object)
     };
   };
 
-  return { ...formState, bindFormx, validate, setFieldsValue, setFieldsError };
+  return { ...formState, bindFormx, validate, setFieldsValue, setFieldsError, resetFields };
 }
 
 export default useFormx;

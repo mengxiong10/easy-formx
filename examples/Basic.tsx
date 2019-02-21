@@ -12,8 +12,8 @@ const rules = {
 };
 
 const initialValue = {
-  name: 'name',
-  description: 'description',
+  name: 'easy-formx',
+  description: 'a very easy react hooks form component',
   labelPosition: 'right',
   labelWidth: 100
 };
@@ -21,7 +21,10 @@ const initialValue = {
 export type ValuesOf<T extends any[]> = T[number];
 
 export default function Basic() {
-  const { bindFormx, value, validate } = useFormx<typeof initialValue>(initialValue, rules);
+  const { bindFormx, value, validate, resetFields } = useFormx<typeof initialValue>(
+    initialValue,
+    rules
+  );
 
   const submit = () => {
     validate().then((data) => {
@@ -54,7 +57,8 @@ export default function Basic() {
           <span style={{ marginLeft: 10 }}>(min: 100, max: 200)</span>
         </FormxItem>
         <FormxItem>
-          <Button type="primary" onClick={submit}>
+          <Button onClick={resetFields}>reset</Button>
+          <Button type="primary" onClick={submit} style={{ marginLeft: 10 }}>
             submit
           </Button>
         </FormxItem>

@@ -29,7 +29,10 @@ const rules = {
   description: { required: true, message: 'required', trigger: 'blur' }
 };
 
-const initialValue = { name: 'name', description: 'description', number: 22 };
+const initialValue = {
+  name: 'easy-formx',
+  description: 'a very easy react hooks form component'
+};
 
 export default function Basic() {
   const { bindFormx, value, validate } = useFormx(initialValue, rules);
@@ -41,16 +44,12 @@ export default function Basic() {
   };
 
   return (
-    <Formx labelWidth="100px" labelPosition={position}>
+    <Formx labelWidth="100px">
       <FormxItem label="Name" {...bindFormx('name')}>
         <Input />
       </FormxItem>
       <FormxItem label="Description" {...bindFormx('description')}>
         <Input />
-      </FormxItem>
-      <FormxItem label="Number" {...bindFormx('number')}>
-        <InputNumber min={0} max={100} />
-        <span style={{ marginLeft: 10 }}>(min: 0, max: 100)</span>
       </FormxItem>
       <FormxItem>
         <Button type="primary" onClick={submit}>
