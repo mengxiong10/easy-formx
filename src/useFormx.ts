@@ -10,7 +10,7 @@ export interface BindFormxProps {
   prop: string;
   value: any;
   error: { message: string };
-  getRules: (prop: string, trigger?: string) => any;
+  required: boolean;
   setFieldsValue: (value: object) => void;
   validate: (keys?: string[], trigger?: 'change' | 'blur') => void;
 }
@@ -84,6 +84,20 @@ function useFormx<T extends object>(initialValue: T = {} as any, rules?: object)
     });
   };
 
+  const isRequired = (prop: string) => {
+    let data = getRules(prop);
+    if (data) {
+      data = [].concat(data);
+      for (let index = 0; index < data.length; index++) {
+        const rule = data[index];
+        if (rule.required) {
+          return true;
+        }
+      }
+    }
+    return false;
+  };
+
   const validate = (keys?: string[], trigger?: 'change' | 'blur') => {
     const allKeys = Object.keys(formState.value);
     const validKeys = keys ? keys.filter((v) => allKeys.indexOf(v) !== -1) : allKeys;
@@ -118,10 +132,11 @@ function useFormx<T extends object>(initialValue: T = {} as any, rules?: object)
   };
 
   const bindFormx = (prop: string): BindFormxProps => {
+    const required = isRequired(prop);
     return {
       setFieldsValue,
       validate,
-      getRules,
+      required,
       prop,
       key: prop,
       value: _get(formState.value, prop),

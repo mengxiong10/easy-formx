@@ -43,7 +43,7 @@ function FormxItem(props: FormxItemProps & React.HTMLAttributes<HTMLDivElement>)
     prop,
     value,
     error,
-    getRules,
+    required,
     setFieldsValue,
     validate,
     label,
@@ -82,26 +82,12 @@ function FormxItem(props: FormxItemProps & React.HTMLAttributes<HTMLDivElement>)
     }
   };
 
-  const isRequired = () => {
-    let data = prop && getRules && getRules(prop);
-    if (data) {
-      data = [].concat(data);
-      for (let index = 0; index < data.length; index++) {
-        const rule = data[index];
-        if (rule.required) {
-          return true;
-        }
-      }
-    }
-    return false;
-  };
-
   const itemClasses = classNames('easy-formx-item', {
     'has-error': error,
     'easy-formx-item--with-help': message
   });
   const labelClasses = classNames('easy-formx-item__label', {
-    'is-required': isRequired()
+    'is-required': required
   });
 
   const style = getStyle(labelPosition, labelWidth);
