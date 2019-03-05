@@ -171,7 +171,7 @@ function useFormx<T extends object>(initialValue: T = {} as any, rules?: object)
     [rules]
   );
 
-  const validate = (keys: string | string[]) => {
+  const validate = (keys?: string | string[]) => {
     return baseValidate(formState.value, keys, rules).catch((err) => {
       setFieldsError(err);
       throw err;

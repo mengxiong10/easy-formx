@@ -13,12 +13,11 @@ function Formx(props: FormxContextValue & React.HTMLAttributes<HTMLFormElement>)
     className,
     ...restProps
   } = props;
-  const formProps = { labelPosition, labelWidth, labelSuffix, disabled };
   const memoized = useMemo(
     () => {
-      return formProps;
+      return { labelPosition, labelWidth, labelSuffix, disabled };
     },
-    [JSON.stringify(formProps)]
+    [labelPosition, labelWidth, labelSuffix, disabled]
   );
   const formClasses = classNames('easy-formx', `easy-formx--label-${labelPosition}`, className);
   return (

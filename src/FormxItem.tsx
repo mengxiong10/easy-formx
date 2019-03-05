@@ -41,10 +41,12 @@ function getStyle(labelPosition?: LabelPosition, labelWidth?: LabelWidth) {
 function FormxItem(props: FormxItemProps & React.HTMLAttributes<HTMLDivElement>) {
   const {
     prop,
+    key,
     value,
     error,
     required,
     dispatch,
+    // above from `bindFormx
     label,
     labelStyle,
     trigger = 'onChange',

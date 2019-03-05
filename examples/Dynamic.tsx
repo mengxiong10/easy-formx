@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Input, Button, Icon } from 'antd';
 import { DisplayState } from './helper';
-import { useFormx, Formx, FormxItem } from '../index';
-import '../index.scss';
+import { useFormx, Formx, FormxItem } from '../src/index';
+import '../src/index.scss';
 
 export default function Dynamic() {
   const fields = ['test1', 'test2'];

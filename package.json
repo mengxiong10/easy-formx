@@ -7,9 +7,7 @@
     "dist",
     "src",
     "test",
-    "typings",
-    "index.ts",
-    "index.scss"
+    "typings"
   ],
   "keywords": [
     "react",
@@ -21,7 +19,7 @@
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "jsnext:main": "dist/index.es.js",
-  "typings": "dist/index.d.ts",
+  "typings": "dist/src/index.d.ts",
   "engines": {
     "node": ">=8",
     "npm": ">=5"
@@ -29,7 +27,7 @@
   "scripts": {
     "test": "jest",
     "test:watch": "npm run test -- --watch",
-    "css": "node-sass index.scss dist/index.css",
+    "css": "node-sass src/index.scss dist/index.css",
     "prebuild": "rimraf dist",
     "build": "npm run css && rollup -c",
     "start": "rollup -c -w",
