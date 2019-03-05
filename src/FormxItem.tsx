@@ -44,8 +44,7 @@ function FormxItem(props: FormxItemProps & React.HTMLAttributes<HTMLDivElement>)
     value,
     error,
     required,
-    setFieldsValue,
-    validate,
+    dispatch,
     label,
     labelStyle,
     trigger = 'onChange',
@@ -58,8 +57,8 @@ function FormxItem(props: FormxItemProps & React.HTMLAttributes<HTMLDivElement>)
 
   useEffect(() => {
     return () => {
-      if (setFieldsValue && prop) {
-        setFieldsValue({ [prop]: undefined });
+      if (prop && dispatch) {
+        dispatch({ type: 'unmount', prop, value });
       }
     };
   }, []);
@@ -68,17 +67,14 @@ function FormxItem(props: FormxItemProps & React.HTMLAttributes<HTMLDivElement>)
 
   const handleChange = (event: any) => {
     const value = getValue(event);
-    if (setFieldsValue && prop) {
-      setFieldsValue({ [prop]: value });
-      if (validate) {
-        validate([prop], 'change');
-      }
+    if (prop && dispatch) {
+      dispatch({ type: 'change', prop, value });
     }
   };
 
   const handleBlur = () => {
-    if (setFieldsValue && prop && validate) {
-      validate([prop], 'blur');
+    if (prop && dispatch) {
+      dispatch({ type: 'blur', prop, value });
     }
   };
 
