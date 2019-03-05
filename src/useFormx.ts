@@ -30,6 +30,10 @@ export interface dispatchFieldPayload {
   value: any;
 }
 
+// export interface Rule extends any {
+
+// }
+
 function getRules(prop: string, rules?: object, trigger?: string): any[] {
   if (!rules || !rules[prop]) {
     return [];

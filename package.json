@@ -49,7 +49,7 @@
     ]
   },
   "jest": {
-    "setupTestFrameworkScriptFile": "<rootDir>test/setup.ts",
+    "setupTestFrameworkScriptFile": "<rootDir>__tests__/setup.ts",
     "collectCoverageFrom": [
       "src/**/*.{ts,tsx}"
     ],
@@ -57,7 +57,7 @@
       ".(ts|tsx)": "ts-jest"
     },
     "testMatch": [
-      "<rootDir>/test/**/?(*.)(spec|test).ts?(x)"
+      "<rootDir>__tests__/**/?(*.)(spec|test).ts?(x)"
     ],
     "moduleFileExtensions": [
       "ts",
@@ -87,8 +87,8 @@
     "@types/react": "^16.8.2",
     "@types/react-dom": "^16.8.0",
     "antd": "^3.10.9",
-    "enzyme": "^3.7.0",
-    "enzyme-adapter-react-16": "^1.7.0",
+    "enzyme": "^3.9.0",
+    "enzyme-adapter-react-16": "^1.10.0",
     "gh-pages": "^2.0.1",
     "highlight.js": "^9.13.1",
     "husky": "^1.1.4",
