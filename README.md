@@ -2,8 +2,17 @@
 
 [中文版](https://github.com/mengxiong10/easy-formx/blob/master/README.zh-CN.md)
 
-> a very easy react hooks form component. replace the antd form component.
+> a very easy react hooks form component. can replace the antd form component.
 
+<a href="https://travis-ci.org/mengxiong10/easy-formx">
+  <img src="https://travis-ci.org/mengxiong10/easy-formx.svg?branch=master" alt="build:passed">
+</a>
+<a href="https://coveralls.io/github/mengxiong10/easy-formx">
+  <img src="https://coveralls.io/repos/github/mengxiong10/easy-formx/badge.svg?branch=master&service=github" alt="Badge">
+</a>
+<a href="https://www.npmjs.com/package/easy-formx">
+  <img src="https://img.shields.io/npm/v/easy-formx.svg" alt="npm">
+</a>
 <a href="LICENSE">
   <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="MIT">
 </a>
@@ -66,7 +75,9 @@ export default function Basic() {
 ### useFormx
 
 ```js
-const { bindFormx, value, validate, setFieldsValue, setFieldsError } = useFormx(initialValue);
+const { bindFormx, value, validate, setFieldsValue, setFieldsError, getField } = useFormx(
+  initialValue
+);
 ```
 
 #### bindFormx
@@ -75,21 +86,54 @@ A function that returns the appropriate props that can be spread on the `FormxIt
 
 After bind `FormxItem` by bindFormx, value(or other property defined by valuePropName) onChange(or other property defined by trigger) props will be added to first child comoponent.
 
+```jsx
+<FormxItem label="name" {...bindFormx('name')}>
+  <input type="text" />
+</FormxItem>
+```
+
 #### setFieldsValue
+
+Set the value of fields
 
 ```js
 setFieldsValue({ name: 'name', age: 'age' });
 ```
 
-Set the value of fields
+#### setFieldsError
+
+Set the error of fields
+
+```js
+setFieldsError({ name: new Error('required') });
+```
 
 #### validate
+
+validate all fields, return promise
 
 ```js
 validate().then();
 ```
 
-validate all fields
+#### getField
+
+get the binding field value and error;
+
+```js
+// basic
+const [value, error] = getField('name');
+
+// just update the wrapper compoennt when the bindingValue changed
+const expensiveItem = useMemo(
+  () => (
+    <FormxItem label="name" {...bindFormx('name')}>
+      <ExpensiveComponent />
+    </FormxItem>
+  ),
+  getField('name')
+);
+```
 
 ### Formx
 

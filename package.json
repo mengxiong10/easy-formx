@@ -19,7 +19,7 @@
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "jsnext:main": "dist/index.es.js",
-  "typings": "dist/src/index.d.ts",
+  "typings": "dist/index.d.ts",
   "engines": {
     "node": ">=8",
     "npm": ">=5"
@@ -27,9 +27,10 @@
   "scripts": {
     "test": "jest",
     "test:watch": "npm run test -- --watch",
+    "test:push": "jest --coverage --coverageReporters=text-lcov | coveralls",
     "css": "node-sass src/index.scss dist/index.css",
     "prebuild": "rimraf dist",
-    "build": "npm run css && rollup -c",
+    "build": "npm test && npm run css & rollup -c",
     "start": "rollup -c -w",
     "dev": "parcel example.html",
     "build:example": "parcel build ./example.html --public-url ./ --out-dir examples/dist --no-source-maps",
@@ -87,6 +88,7 @@
     "@types/react": "^16.8.2",
     "@types/react-dom": "^16.8.0",
     "antd": "^3.10.9",
+    "coveralls": "^3.0.3",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.10.0",
     "gh-pages": "^2.0.1",
