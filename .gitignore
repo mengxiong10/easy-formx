@@ -11,6 +11,9 @@ dist
 .DS_Store
 .env
 .cache
+.vscode
+
+coverage
 
 npm-debug.log*
 yarn-debug.log*
