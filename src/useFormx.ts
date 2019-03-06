@@ -19,7 +19,7 @@ export interface FormState<T> {
   error: object;
 }
 
-export interface Action {
+export interface FormAction {
   type: 'setValue' | 'setError' | 'reset';
   payload: object;
 }
@@ -108,7 +108,7 @@ function init(initialValue: any) {
   return { value: initialValue, error: {} };
 }
 
-function reducer(state: FormState<any>, action: Action) {
+function reducer(state: FormState<any>, action: FormAction) {
   let { value, error } = state;
   const { type, payload } = action;
   switch (type) {
@@ -132,7 +132,7 @@ function reducer(state: FormState<any>, action: Action) {
 }
 
 function useFormx<T extends object>(initialValue: T = {} as any, rules?: object) {
-  const [formState, dispatch] = useReducer<Reducer<FormState<T>, Action>, T>(
+  const [formState, dispatch] = useReducer<Reducer<FormState<T>, FormAction>, T>(
     reducer,
     initialValue,
     init
@@ -187,13 +187,14 @@ function useFormx<T extends object>(initialValue: T = {} as any, rules?: object)
 
   const bindFormx = (prop: string): BindFormxProps => {
     const required = isRequired(prop, rules);
+    const [value, error] = getField(prop);
     return {
       required,
+      value,
+      error,
       prop,
       key: prop,
-      dispatch: dispatchField,
-      value: _get(formState.value, prop),
-      error: _get(formState.error, prop)
+      dispatch: dispatchField
     };
   };
 

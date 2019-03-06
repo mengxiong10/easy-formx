@@ -55,7 +55,6 @@ function FormxItem(props: FormxItemProps & React.HTMLAttributes<HTMLDivElement>)
   } = props;
 
   const { labelPosition, labelSuffix, labelWidth, disabled } = useContext(FormxContext);
-  console.log('render', prop);
 
   useEffect(() => {
     return () => {
