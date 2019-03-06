@@ -82,7 +82,7 @@ describe('FormxItem', () => {
   it('prop label', async () => {
     const wrapper = mount(<FormxItem />);
     // should not render label when label is undefined
-    expect(wrapper.find(labelClass)).toHaveLength(0);
+    expect(wrapper.exists(labelClass)).toBe(false);
 
     wrapper.setProps({ label: 'test' });
     expect(wrapper.find(labelClass).text()).toBe('test');
