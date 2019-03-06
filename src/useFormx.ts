@@ -3,7 +3,7 @@ import Schema from 'async-validator';
 import _clone from 'lodash/clone';
 import _setWith from 'lodash/setWith';
 import _get from 'lodash/get';
-import _find from 'lodash/find';
+import { getRules, isRequired, getValidKeys, find } from './utils';
 
 export interface BindFormxProps {
   key: string;
@@ -29,43 +29,6 @@ export interface dispatchFieldPayload {
   prop: string;
   value: any;
   error?: { message: string };
-}
-
-function getRules(prop: string, rules?: object, trigger?: string): any[] {
-  if (!rules || !rules[prop]) {
-    return [];
-  }
-  const result = Array.isArray(rules[prop]) ? rules[prop] : [rules[prop]];
-  if (!trigger) {
-    return result;
-  }
-  return result.filter((rule: any) => {
-    return !rule.trigger || rule.trigger.indexOf(trigger) !== -1;
-  });
-}
-
-function isRequired(prop: string, rules?: object) {
-  let data = getRules(prop, rules);
-  if (data.length) {
-    for (let index = 0; index < data.length; index++) {
-      const rule = data[index];
-      if (rule.required) {
-        return true;
-      }
-    }
-  }
-  return false;
-}
-
-function getValidKeys(formValue: object, keys?: string | string[]) {
-  const allKeys = Object.keys(formValue);
-  if (!keys) {
-    return allKeys;
-  }
-  if (!Array.isArray(keys)) {
-    keys = [keys];
-  }
-  return keys.filter((v) => allKeys.indexOf(v) !== -1);
 }
 
 function baseValidate(
@@ -94,7 +57,7 @@ function baseValidate(
       if (errors) {
         const error: any = {};
         validKeys.forEach((key) => {
-          error[key] = _find(errors, (o) => o.field === key);
+          error[key] = find(errors, (o) => o.field === key);
         });
         reject(error);
       } else {
