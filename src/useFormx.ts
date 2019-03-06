@@ -28,11 +28,8 @@ export interface dispatchFieldPayload {
   type: 'change' | 'blur' | 'unmount';
   prop: string;
   value: any;
+  error?: { message: string };
 }
-
-// export interface Rule extends any {
-
-// }
 
 function getRules(prop: string, rules?: object, trigger?: string): any[] {
   if (!rules || !rules[prop]) {
@@ -149,13 +146,9 @@ function useFormx<T extends object>(initialValue: T = {} as any, rules?: object)
     dispatch({ type: 'setError', payload });
   }, []);
 
-  const resetFields = useCallback(() => {
-    dispatch({ type: 'reset', payload: initialValue });
-  }, []);
-
   const dispatchField = useCallback(
     (payload: dispatchFieldPayload) => {
-      const { type, prop, value } = payload;
+      const { type, prop, value, error } = payload;
       if (type === 'unmount') {
         setFieldsValue({ [prop]: undefined });
         return;
@@ -166,7 +159,9 @@ function useFormx<T extends object>(initialValue: T = {} as any, rules?: object)
       }
       baseValidate(data, prop, rules, type)
         .then(() => {
-          setFieldsError({ [prop]: undefined });
+          if (error) {
+            setFieldsError({ [prop]: undefined });
+          }
         })
         .catch((err) => {
           setFieldsError(err);
@@ -174,6 +169,14 @@ function useFormx<T extends object>(initialValue: T = {} as any, rules?: object)
     },
     [rules]
   );
+
+  const resetFields = () => {
+    dispatch({ type: 'reset', payload: initialValue });
+  };
+
+  const getField = (prop: string) => {
+    return [_get(formState.value, prop), _get(formState.error, prop)];
+  };
 
   const validate = (keys?: string | string[]) => {
     return baseValidate(formState.value, keys, rules).catch((err) => {
@@ -194,7 +197,15 @@ function useFormx<T extends object>(initialValue: T = {} as any, rules?: object)
     };
   };
 
-  return { ...formState, bindFormx, validate, setFieldsValue, setFieldsError, resetFields };
+  return {
+    ...formState,
+    bindFormx,
+    validate,
+    setFieldsValue,
+    setFieldsError,
+    resetFields,
+    getField
+  };
 }
 
 export default useFormx;

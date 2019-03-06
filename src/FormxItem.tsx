@@ -41,7 +41,6 @@ function getStyle(labelPosition?: LabelPosition, labelWidth?: LabelWidth) {
 function FormxItem(props: FormxItemProps & React.HTMLAttributes<HTMLDivElement>) {
   const {
     prop,
-    key,
     value,
     error,
     required,
@@ -56,6 +55,7 @@ function FormxItem(props: FormxItemProps & React.HTMLAttributes<HTMLDivElement>)
   } = props;
 
   const { labelPosition, labelSuffix, labelWidth, disabled } = useContext(FormxContext);
+  console.log('render', prop);
 
   useEffect(() => {
     return () => {
@@ -70,13 +70,13 @@ function FormxItem(props: FormxItemProps & React.HTMLAttributes<HTMLDivElement>)
   const handleChange = (event: any) => {
     const value = getValue(event);
     if (prop && dispatch) {
-      dispatch({ type: 'change', prop, value });
+      dispatch({ type: 'change', prop, value, error });
     }
   };
 
   const handleBlur = () => {
     if (prop && dispatch) {
-      dispatch({ type: 'blur', prop, value });
+      dispatch({ type: 'blur', prop, value, error });
     }
   };
 
