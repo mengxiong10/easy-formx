@@ -80,6 +80,10 @@ const { bindFormx, value, validate, setFieldsValue, setFieldsError, getField } =
 );
 ```
 
+#### value
+
+current form value
+
 #### bindFormx
 
 A function that returns the appropriate props that can be spread on the `FormxItem`.
@@ -124,7 +128,7 @@ get the binding field value and error;
 // basic
 const [value, error] = getField('name');
 
-// just update the wrapper compoennt when the bindingValue changed
+// just update the wrapper compoennt when the binding value changed
 const expensiveItem = useMemo(
   () => (
     <FormxItem label="name" {...bindFormx('name')}>
@@ -156,4 +160,4 @@ const expensiveItem = useMemo(
 
 [MIT](https://github.com/mengxiong10/easy-formx/blob/master/LICENSE)
 
-Copyright (c) 2018-present xiemengxiong
+Copyright (c) 2019-present xiemengxiong
