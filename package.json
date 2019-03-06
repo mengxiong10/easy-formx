@@ -6,11 +6,10 @@
   "files": [
     "dist",
     "src",
-    "test",
     "typings"
   ],
   "keywords": [
-    "react",
+    "React",
     "hooks",
     "form"
   ],
@@ -31,7 +30,6 @@
     "css": "node-sass src/index.scss dist/index.css",
     "prebuild": "rimraf dist",
     "build": "npm test && npm run css & rollup -c",
-    "start": "rollup -c -w",
     "dev": "parcel example.html",
     "build:example": "parcel build ./example.html --public-url ./ --out-dir examples/dist --no-source-maps",
     "deploy": "npm run build:example && gh-pages -d examples/dist",
