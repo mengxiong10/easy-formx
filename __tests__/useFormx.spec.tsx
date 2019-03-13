@@ -1,5 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
+import sinon from 'sinon';
 import { Formx, FormxItem, useFormx } from '../src';
 
 describe('useFormx', () => {
@@ -90,6 +91,26 @@ describe('useFormx', () => {
       expect(wrapper.find('.easy-formx-item__error').text()).toBe('required');
       done();
     });
+  });
+
+  it('should trigger original change event', () => {
+    jest.useFakeTimers();
+    const spy = sinon.spy();
+    const Test = () => {
+      const data = { name: 'before' };
+      const { bindFormx } = useFormx(data);
+      return (
+        <Formx>
+          <FormxItem {...bindFormx('name')}>
+            <input type="text" onChange={spy} />
+          </FormxItem>
+        </Formx>
+      );
+    };
+    const wrapper = mount(<Test />);
+    wrapper.find('input').simulate('change');
+    jest.runAllTimers();
+    expect(spy.calledOnce).toBe(true);
   });
 
   it('setFieldsValue', () => {

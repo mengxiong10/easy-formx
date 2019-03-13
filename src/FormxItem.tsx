@@ -73,6 +73,15 @@ function FormxItem(props: FormxItemProps & React.HTMLAttributes<HTMLDivElement>)
     }
   };
 
+  const getChangeFn = (originalChanage?: any) => {
+    return (...args: any[]) => {
+      if (typeof originalChanage === 'function') {
+        originalChanage(...args);
+      }
+      handleChange(args[0]);
+    };
+  };
+
   const handleBlur = () => {
     if (prop && dispatch) {
       dispatch({ type: 'blur', prop, value, error });
@@ -95,8 +104,8 @@ function FormxItem(props: FormxItemProps & React.HTMLAttributes<HTMLDivElement>)
       if (index === 0 && React.isValidElement(child)) {
         return React.cloneElement<any>(child, {
           disabled: (child.props as any).disabled || disabled,
-          [valuePropName!]: value,
-          [trigger!]: handleChange
+          [valuePropName]: value,
+          [trigger]: getChangeFn(child.props[trigger])
         });
       }
       return child;
