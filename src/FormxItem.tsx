@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import FormxContext, { LabelPosition, LabelWidth } from './FormxContext';
 import { BindFormxProps } from './useFormx';
 import classNames from 'classnames';
@@ -55,14 +55,6 @@ function FormxItem(props: FormxItemProps & React.HTMLAttributes<HTMLDivElement>)
   } = props;
 
   const { labelPosition, labelSuffix, labelWidth, disabled } = useContext(FormxContext);
-
-  useEffect(() => {
-    return () => {
-      if (prop && dispatch) {
-        dispatch({ type: 'unmount', prop, value });
-      }
-    };
-  }, []);
 
   const message = error && error.message;
 

@@ -25,7 +25,7 @@ export interface FormAction {
 }
 
 export interface dispatchFieldPayload {
-  type: 'change' | 'blur' | 'unmount';
+  type: 'change' | 'blur';
   prop: string;
   value: any;
   error?: { message: string };
@@ -112,10 +112,6 @@ function useFormx<T extends object>(initialValue: T = {} as any, rules?: object)
   const dispatchField = useCallback(
     (payload: dispatchFieldPayload) => {
       const { type, prop, value, error } = payload;
-      if (type === 'unmount') {
-        setFieldsValue({ [prop]: undefined });
-        return;
-      }
       const data = { [prop]: value };
       if (type === 'change') {
         setFieldsValue(data);
