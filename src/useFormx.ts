@@ -6,7 +6,7 @@ import _get from 'lodash/get';
 import { getRules, isRequired, getValidKeys, find } from './utils';
 
 export interface BindFormxProps {
-  key: string;
+  key: string | number;
   prop: string;
   value: any;
   error: { message: string };
