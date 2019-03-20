@@ -51,6 +51,7 @@ function FormxItem(props: FormxItemProps & React.HTMLAttributes<HTMLDivElement>)
     trigger = 'onChange',
     valuePropName = 'value',
     children,
+    className,
     ...rest
   } = props;
 
@@ -80,7 +81,7 @@ function FormxItem(props: FormxItemProps & React.HTMLAttributes<HTMLDivElement>)
     }
   };
 
-  const itemClasses = classNames('easy-formx-item', {
+  const itemClasses = classNames('easy-formx-item', className, {
     'has-error': error,
     'easy-formx-item--with-help': message
   });
