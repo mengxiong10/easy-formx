@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import FormxContext, { FormxContextValue } from './FormxContext';
 import classNames from 'classnames';
 
@@ -20,9 +20,12 @@ function Formx(props: FormxContextValue & React.HTMLAttributes<HTMLFormElement>)
     [labelPosition, labelWidth, labelSuffix, disabled]
   );
   const formClasses = classNames('easy-formx', `easy-formx--label-${labelPosition}`, className);
+
+  const prevent = useCallback((e: React.FormEvent<HTMLFormElement>) => e.preventDefault(), []);
+
   return (
     <Provider value={memoized}>
-      <form className={formClasses} {...restProps} />
+      <form onSubmit={prevent} className={formClasses} {...restProps} />
     </Provider>
   );
 }
