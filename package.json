@@ -1,6 +1,6 @@
 {
   "name": "easy-formx",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "a react form component to replace antd form",
   "author": "mengxiong10",
   "files": [
