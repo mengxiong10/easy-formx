@@ -18,8 +18,6 @@ const initialValue = {
   labelWidth: 100
 };
 
-export type ValuesOf<T extends any[]> = T[number];
-
 export default function Basic() {
   const { bindFormx, value, validate, resetFields } = useFormx<typeof initialValue>(
     initialValue,
