@@ -68,7 +68,7 @@ function baseValidate(
 }
 
 function init(initialValue: any) {
-  return { value: initialValue, error: {} };
+  return { value: { ...initialValue }, error: {} };
 }
 
 function reducer(state: FormState<any>, action: FormAction) {
@@ -76,13 +76,11 @@ function reducer(state: FormState<any>, action: FormAction) {
   const { type, payload } = action;
   switch (type) {
     case 'setValue':
-      value = _clone(value);
       Object.keys(payload).forEach((key) => {
         _setWith(value, key, payload[key], _clone);
       });
       return { value, error };
     case 'setError':
-      error = _clone(error);
       Object.keys(payload).forEach((key) => {
         _setWith(error, key, payload[key], _clone);
       });
@@ -129,9 +127,9 @@ function useFormx<T extends object>(initialValue: T = {} as any, rules?: object)
     [rules]
   );
 
-  const resetFields = () => {
+  const resetFields = useCallback(() => {
     dispatch({ type: 'reset', payload: initialValue });
-  };
+  }, []);
 
   const getField = (prop: string) => {
     return [_get(formState.value, prop), _get(formState.error, prop)];
