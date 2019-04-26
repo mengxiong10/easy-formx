@@ -7,6 +7,8 @@ import _get from 'lodash/get';
 export interface FormxItemProps extends Partial<BindFormxProps> {
   label?: string;
   labelStyle?: object;
+  labelWidth?: LabelWidth;
+  labelPosition?: LabelPosition;
   trigger?: string;
   valuePropName?: string;
 }
@@ -47,6 +49,8 @@ function FormxItem(props: FormxItemProps & React.HTMLAttributes<HTMLDivElement>)
     dispatch,
     // above from `bindFormx
     label,
+    labelWidth,
+    labelPosition,
     labelStyle,
     trigger = 'onChange',
     valuePropName = 'value',
@@ -55,7 +59,12 @@ function FormxItem(props: FormxItemProps & React.HTMLAttributes<HTMLDivElement>)
     ...rest
   } = props;
 
-  const { labelPosition, labelSuffix, labelWidth, disabled } = useContext(FormxContext);
+  const {
+    labelPosition: globalLabelPosition,
+    labelWidth: globalLabelWidth,
+    labelSuffix,
+    disabled
+  } = useContext(FormxContext);
 
   const message = error && error.message;
 
@@ -89,7 +98,7 @@ function FormxItem(props: FormxItemProps & React.HTMLAttributes<HTMLDivElement>)
     'is-required': required
   });
 
-  const style = getStyle(labelPosition, labelWidth);
+  const style = getStyle(labelPosition || globalLabelPosition, labelWidth || globalLabelWidth);
 
   let items = children;
   if (prop) {

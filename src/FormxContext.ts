@@ -10,6 +10,9 @@ export interface FormxContextValue {
   disabled?: boolean;
 }
 
-const FormxContext = React.createContext<FormxContextValue>({} as FormxContextValue);
+const FormxContext = React.createContext<FormxContextValue>({
+  labelPosition: 'right',
+  labelSuffix: ':'
+} as FormxContextValue);
 
 export default FormxContext;

@@ -85,6 +85,6 @@ describe('FormxItem', () => {
     expect(wrapper.exists(labelClass)).toBe(false);
 
     wrapper.setProps({ label: 'test' });
-    expect(wrapper.find(labelClass).text()).toBe('test');
+    expect(wrapper.find(labelClass).text()).toBe('test:');
   });
 });
