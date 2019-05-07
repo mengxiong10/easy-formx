@@ -34,6 +34,7 @@
     "build:example": "parcel build ./example.html --public-url ./ --out-dir examples/dist --no-source-maps",
     "deploy": "npm run build:example && gh-pages -d examples/dist",
     "format": "prettier --write src/**/* test/**/*",
+    "version": "conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md",
     "release": "bash build/git.sh && bash build/release.sh"
   },
   "husky": {
@@ -87,6 +88,7 @@
     "@types/react-dom": "^16.8.0",
     "@types/sinon": "^7.0.9",
     "antd": "^3.10.9",
+    "conventional-changelog-cli": "^2.0.21",
     "coveralls": "^3.0.3",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.10.0",
