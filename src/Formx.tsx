@@ -1,8 +1,10 @@
-import React, { useMemo, useCallback } from 'react';
+import * as React from 'react';
 import FormxContext, { FormxContextValue } from './FormxContext';
 import classNames from 'classnames';
 
 const { Provider } = FormxContext;
+
+const { useMemo, useCallback } = React;
 
 function Formx(props: FormxContextValue & React.HTMLAttributes<HTMLFormElement>) {
   const {

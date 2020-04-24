@@ -1,8 +1,10 @@
-import React, { useContext } from 'react';
+import * as React from 'react';
 import FormxContext, { LabelPosition, LabelWidth } from './FormxContext';
 import { BindFormxProps } from './useFormx';
 import classNames from 'classnames';
 import _get from 'lodash/get';
+
+const { useContext } = React;
 
 export interface FormxItemProps extends Partial<BindFormxProps> {
   label?: string;
