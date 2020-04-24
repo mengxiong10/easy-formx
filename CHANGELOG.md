@@ -1,3 +1,7 @@
+## [0.4.1](https://github.com/mengxiong10/easy-formx/compare/v0.4.0...v0.4.1) (2020-04-24)
+
+
+
 # [0.4.0](https://github.com/mengxiong10/easy-formx/compare/v0.3.2...v0.4.0) (2019-04-26)
 
 ### Bug Fixes
