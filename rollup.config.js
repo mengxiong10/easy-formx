@@ -6,7 +6,8 @@ import { terser } from 'rollup-plugin-terser';
 
 import pkg from './package.json';
 
-const external = (id) => !id.startsWith('.') && !id.startsWith('/');
+// TODO: linux / windows: D
+const external = (id) => !id.startsWith('.') && !id.startsWith('/') && !id.startsWith('D');
 
 const input = 'src/index.ts';
 

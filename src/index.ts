@@ -1,5 +1,5 @@
-export { default as useFormx } from './useFormx';
+import useFormx from './useFormx';
+import Formx from './Formx';
+import FormxItem from './FormxItem';
 
-export { default as Formx } from './Formx';
-
-export { default as FormxItem } from './FormxItem';
+export { useFormx, Formx, FormxItem };

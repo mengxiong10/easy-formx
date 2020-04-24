@@ -1,5 +1,5 @@
 {
-  "extends": ["tslint:recommend", "tslint-react", "tslint-config-prettier"],
+  "extends": ["tslint:recommended", "tslint-react", "tslint-config-prettier"],
   "rules": {
     "interface-name": [true, "never-prefix"],
     "indent": [true, "spaces", 2],
