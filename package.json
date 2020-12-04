@@ -91,7 +91,7 @@
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.10.0",
     "gh-pages": "^2.0.1",
-    "highlight.js": "^9.13.1",
+    "highlight.js": "^10.4.1",
     "husky": "^1.1.4",
     "jest": "^23.6.0",
     "lint-staged": "^8.0.5",
